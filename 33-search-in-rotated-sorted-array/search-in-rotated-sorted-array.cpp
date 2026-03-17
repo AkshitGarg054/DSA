@@ -1,5 +1,7 @@
 class Solution {
 public:
+    // in this question, one half will always be sorted, and we just need to find out which half is sorted
+
     int search(vector<int>& nums, int target) {
         int n = nums.size();
 
