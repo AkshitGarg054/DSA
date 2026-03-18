@@ -1,5 +1,7 @@
 class Solution {
 public:
+    // always remember that : to check whether a string y is present in string x as a substring or not, we follow this template
+
     int appendCharacters(string s, string t) {
         int i = 0, j = 0;
 
