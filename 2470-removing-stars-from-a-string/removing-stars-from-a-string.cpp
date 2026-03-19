@@ -1,5 +1,8 @@
 class Solution {
 public:
+    // HOW TO IDENTIFY STACK ?
+    // agar last wala remove krne ko bola to samjh jaane ka ki stack haii
+
     string removeStars(string s) {
         int n = s.size();
         stack<int> st;
