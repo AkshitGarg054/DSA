@@ -1,24 +1,37 @@
 class Solution {
 public:
-    // For the correct approach, store the indices in the stack to get the length, instead of actual brackets
-
     int longestValidParentheses(string s) {
         int n = s.size();
-        stack<int> st;
-        st.push(-1); // base index
+    
+        int left = 0, right = 0;
+        int maxi = 0;
 
-        int max_len = 0;
-
+        // forward pass
         for(int i = 0; i < n; i++) {
-            if(s[i] == '(') st.push(i);
-            else {
-                st.pop();
+            if(s[i] == '(') left++;
+            else right++;
 
-                if(st.empty()) st.push(i); // reset base
-                else max_len = max(max_len, i - st.top());
-            }
+            if(left == right) maxi = max(maxi, left * 2);
+            else if(right > left) { // extra right bracket encountered
+                left = 0;
+                right = 0;
+            } 
         }
 
-        return max_len;
+        left = 0, right = 0;
+
+        // backward pass
+        for(int i = n-1; i >= 0; i--) {
+            if(s[i] == '(') left++;
+            else right++;
+
+            if(left == right) maxi = max(maxi, left * 2);
+            else if(left > right) { // extra left bracket encountered
+                left = 0;
+                right = 0;
+            } 
+        }
+
+        return maxi;
     }
 };
