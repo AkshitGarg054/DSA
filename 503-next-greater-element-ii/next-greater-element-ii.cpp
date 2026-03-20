@@ -2,8 +2,6 @@ class Solution {
 public:
     vector<int> nextGreaterElements(vector<int>& nums) {
         int n = nums.size();
-        vector<int> vec(nums.begin(), nums.end());
-        for(int i = 0; i < n; i++) vec.push_back(nums[i]);
 
         vector<int> nge(2*n, -1);
         stack<int> st; // store indices
