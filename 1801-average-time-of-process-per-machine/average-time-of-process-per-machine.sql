@@ -1,3 +1,5 @@
+## Extract total_end_time and total_start_time in separate tables, join them and then extract the actual thing required
+
 SELECT s.machine_id, ROUND((e.end_time - s.start_time) / e.total_processes, 3) AS processing_time
 FROM (
     SELECT machine_id, SUM(timestamp) as end_time, COUNT(process_id) AS total_processes
