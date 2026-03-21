@@ -1,19 +1,26 @@
-## Whenever consecutive rows ki baat ho, then think of ROW_NUMBER and then take diff with it
-## consecutive rows have constant difference
+## As we need >= 3 consecutive, therefore, self join three times, and extract id from all the three tables
+# one by one and then do UNION
 
-SELECT id, visit_date, people
-FROM (
-    SELECT *, id - ROW_NUMBER() OVER (ORDER BY id ASC) as diff
-    FROM Stadium
-    WHERE people >= 100
-) t1
-WHERE diff in (
-    SELECT diff
-    FROM (
-        SELECT id - ROW_NUMBER() OVER (ORDER BY id ASC) as diff
-        FROM Stadium
-        WHERE people >= 100
-    ) t2                    
-    GROUP BY diff 
-    HAVING COUNT(diff) >= 3 
-)
+select s1.id, s1.visit_date, s1.people 
+from Stadium s1 
+join Stadium s2 on s2.id=s1.id+1 
+join Stadium s3 on  s3.id=s1.id+2
+where s1.people>=100 and s2.people>=100 and s3.people>=100
+
+union
+
+select s2.id, s2.visit_date, s2.people
+from Stadium s1
+join Stadium s2 on s2.id = s1.id + 1 
+join Stadium s3 on s3.id = s1.id + 2
+where s1.people >= 100 and s2.people >= 100 and s3.people >= 100
+
+union
+
+select s3.id, s3.visit_date, s3.people
+from Stadium s1
+join Stadium s2 on s2.id = s1.id + 1 
+join Stadium s3 on s3.id = s1.id + 2
+where s1.people >= 100 and s2.people >= 100 and s3.people >= 100
+
+order by id; 
