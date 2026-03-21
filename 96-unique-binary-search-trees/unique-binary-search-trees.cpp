@@ -1,18 +1,20 @@
 class Solution {
 public:
-    int solve(int n) {
+    int solve(int n, vector<int> &dp) {
         if(n <= 1) return 1;
+        if(dp[n] != -1) return dp[n];
 
         int ans = 0;
         // consider i as root node
         for(int i = 1; i <= n; i++) {
-            ans += solve(i - 1) * solve(n - i); // (i-1) nodes before i, (n-i) nodes after i
+            ans += solve(i - 1, dp) * solve(n - i, dp); // (i-1) nodes before i, (n-i) nodes after i
         }
 
-        return ans;
+        return dp[n] = ans;
     }
 
     int numTrees(int n) {
-        return solve(n);
+        vector<int> dp(n + 1, -1);
+        return solve(n, dp);
     }
 };
