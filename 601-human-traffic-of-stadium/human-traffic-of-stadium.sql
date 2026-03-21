@@ -1,26 +1,18 @@
-## As we need >= 3 consecutive, therefore, self join three times, and extract id from all the three tables
-# one by one and then do UNION
+WITH temp AS (
+    SELECT *,
+           LAG(people, 1) OVER (ORDER BY id) AS prev1,
+           LAG(people, 2) OVER (ORDER BY id) AS prev2,
+           LEAD(people, 1) OVER (ORDER BY id) AS next1,
+           LEAD(people, 2) OVER (ORDER BY id) AS next2
+    FROM Stadium
+)
 
-select s1.id, s1.visit_date, s1.people 
-from Stadium s1 
-join Stadium s2 on s2.id=s1.id+1 
-join Stadium s3 on  s3.id=s1.id+2
-where s1.people>=100 and s2.people>=100 and s3.people>=100
-
-union
-
-select s2.id, s2.visit_date, s2.people
-from Stadium s1
-join Stadium s2 on s2.id = s1.id + 1 
-join Stadium s3 on s3.id = s1.id + 2
-where s1.people >= 100 and s2.people >= 100 and s3.people >= 100
-
-union
-
-select s3.id, s3.visit_date, s3.people
-from Stadium s1
-join Stadium s2 on s2.id = s1.id + 1 
-join Stadium s3 on s3.id = s1.id + 2
-where s1.people >= 100 and s2.people >= 100 and s3.people >= 100
-
-order by id; 
+SELECT id, visit_date, people
+FROM temp
+WHERE 
+    (people >= 100 AND prev1 >= 100 AND prev2 >= 100) -- current is 3rd
+    OR
+    (people >= 100 AND prev1 >= 100 AND next1 >= 100) -- current is middle
+    OR
+    (people >= 100 AND next1 >= 100 AND next2 >= 100) -- current is 1st
+ORDER BY id;
