@@ -13,8 +13,23 @@ public:
         return dp[n] = ans;
     }
 
+    int solveTab(int n) { // Tabulation code
+        vector<int> dp(n + 1, 0);
+        dp[0] = dp[1] = 1; // base case
+
+        // two parameters are changing --> number of nodes, and root node 
+        for(int i = 2; i <= n; i++) { // i -> number of nodes
+            for(int j = 1; j <= i; j++) { // j -> root node
+                dp[i] += dp[j - 1] * dp[i - j]; // (j-1) nodes before j, (i-j) nodes after j
+            }
+        }
+
+        return dp[n];
+    }
+
     int numTrees(int n) {
         vector<int> dp(n + 1, -1);
-        return solve(n, dp);
+        // return solve(n, dp);
+        return solveTab(n);
     }
 };
