@@ -1,9 +1,19 @@
 class Solution {
 public:
-    // assume, every value as a node
-    // as for each value arr[i], we can go to i - arr[i] and i + arr[i]
-    // means each value has two paths (or choices), ...those two values will again have two paths
-    // looks like a tree --> traverse its levels like level order BFS
+    vector<int> vis;
+
+    bool dfs(vector<int> &arr, int index) {
+        vis[index] = 1; 
+        if(arr[index] == 0) return true;
+
+        int left = index - arr[index];
+        int right = index + arr[index];
+
+        if(left >= 0 && !vis[left] && dfs(arr, left)) return true;
+        if(right < arr.size() && !vis[right] && dfs(arr, right)) return true;
+
+        return false;
+    }
 
     bool canReach(vector<int>& arr, int start) {
         int n = arr.size();
@@ -18,32 +28,7 @@ public:
 
         if(zero == false) return false;
 
-        queue<int> q;
-        vector<bool> vis(n, false); // to mark the index as visited, otherwise we'll keep visiting again n again
-        q.push(start);
-        vis[start] = true;
-
-        while(!q.empty()) {
-            int curr = q.front();
-            q.pop();
-
-            if(arr[curr] == 0) return true;
-
-            // get the left and right index
-            int left = curr - arr[curr];
-            int right = curr + arr[curr];
-
-            if(left >= 0 && !vis[left]) { 
-                q.push(left);
-                vis[left] = true;
-            }
-
-            if(right < n && !vis[right]) { 
-                q.push(right);
-                vis[right] = true;
-            }
-        }
-
-        return false;
+        vis.resize(n, 0);
+        return dfs(arr, start);
     }
 };
