@@ -2,6 +2,9 @@
 -- FROM Customer c1 JOIN Customer c2
 -- ON DATEDIFF(c2.visited_on, c1.visited_on) = 6
 -- GROUP BY c1.visited_on 
+## Pehle maine dates ko 7 days ke interval ke hisaab se self join kiya 
+## and then uske beech ki amounts ka sum nikal liya ..simple
+
 
 SELECT c2.visited_on, 
 
