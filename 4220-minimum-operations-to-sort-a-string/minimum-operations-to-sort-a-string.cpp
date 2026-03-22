@@ -29,7 +29,7 @@ public:
                 if (s[i] == maxi) maxi_elsewhere = true;
             }
             
-            if (mini_elsewhere || maxi_elsewhere) return 2;
+            if (mini_elsewhere || maxi_elsewhere) return 2; // sort s[1 .. n-1] and then sort s[0 .. n-2]
             return 3;
         }
         return 2;
