@@ -1,5 +1,9 @@
 class Solution {
 public:
+    // we always try to pick (n+1) elements from the heap, kyuki hme n ka gap chahiye
+    // agar (n+1) elements mil rhe hnn, fir to boht badhiaa
+    // aur agar nhi mil rhee, to remaining needed elements ke liye idle process add krdo
+
     int leastInterval(vector<char>& tasks, int n) {
         unordered_map<char, int> mp;
         for(auto ch : tasks) mp[ch]++;
