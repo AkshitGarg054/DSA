@@ -1,5 +1,7 @@
 class Solution {
 public:
+    // If we have consecutive same colors, keep the balloon with maximum removal time and remove all others
+
     int minCost(string colors, vector<int>& neededTime) {
         int n = colors.size();
         int ans = 0;
