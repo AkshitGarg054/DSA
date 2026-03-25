@@ -11,6 +11,9 @@ public:
     // if both xy and yx are even --> (xy + yx)/2 swaps 
     // if both xy and yx are odd --> xy/2 + yx/2 + 2 swaps
 
+    // x x y y x y
+    // y y x x y x
+
     int minimumSwap(string s1, string s2) {
         int n = s1.size();
         int xy = 0, yx = 0;
