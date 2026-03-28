@@ -6,6 +6,8 @@ public:
     //  0 1 0 1
     // this matrix is symmetric always (also, see the pattern of diagonal elements)
     // hme prefix ki length de rakhi  haii (len), we need to go till i se len and j se len
+    // verify isiliye kr rhe hn kyuki, we are not considering lcp[i][j] = 0 wale cells,
+    // so, it is possible ki hmare generated string me vo non-zero bn jaye
 
     vector<int> parent;
 
