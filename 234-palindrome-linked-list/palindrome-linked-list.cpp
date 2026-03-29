@@ -1,28 +1,5 @@
 class Solution {
 public:
-    ListNode* copyList(ListNode* head) {
-        if(head == NULL) return NULL;
-
-        ListNode* newHead = NULL;
-        ListNode* newNode = NULL;
-        
-        while(head != NULL) {
-            ListNode* temp = new ListNode(head -> val);
-            head = head -> next;
-
-            if(newHead == NULL) {
-                newHead = temp;
-                newNode = temp;
-            }
-            else {
-                newNode -> next = temp;
-                newNode = temp;
-            }
-        }
-
-        return newHead;
-    }
-
     ListNode* reverseList(ListNode *head) {
         ListNode *prev = NULL;
         ListNode* next = NULL;
@@ -39,16 +16,31 @@ public:
     }
 
     bool isPalindrome(ListNode* head) {
-        ListNode* copiedHead = copyList(head); // make copy
-        ListNode* reverse_head = reverseList(copiedHead); // reverse the copy
+        if(head == NULL || head -> next == NULL) return true;
 
-        while(head != NULL) {
-            int val1 = head -> val;
-            int val2 = reverse_head -> val;
-            if(val1 != val2) return false;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while(fast != NULL && fast -> next != NULL) {
+            slow = slow -> next;
+            fast = fast -> next -> next;
+        }
 
+        ListNode* head1 = NULL;
+        if(fast == NULL) { // even length linked list
+            head1 = slow;
+        }
+        else if(fast -> next == NULL) {
+            head1 = slow -> next; // odd length linked list
+            slow -> next = NULL;
+        }
+
+        head1 = reverseList(head1);
+
+        // now, compare linkedlists head and head1
+        while(head != NULL && head1 != NULL) {
+            if(head -> val != head1 -> val) return false;
             head = head -> next;
-            reverse_head = reverse_head -> next;
+            head1 = head1 -> next;
         }
 
         return true;
