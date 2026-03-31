@@ -40,6 +40,7 @@ public:
 
         for(int i = 0; i < left.size(); i++) {
             if(left[i].size() != right[i].size()) return false;
+            
             for(int j = 0; j < left[i].size(); j++) {
                 if(left[i][j] == NULL && right[i][j] == NULL) continue;
                 else if(left[i][j] == NULL || right[i][j] == NULL) return false;
