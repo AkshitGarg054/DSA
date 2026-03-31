@@ -1,53 +1,16 @@
 class Solution {
 public:
-    // level order traversal
-    vector<vector<TreeNode*>> solve(TreeNode* root) {
-        vector<vector<TreeNode*>> ans;
-        queue<TreeNode*> q;
-        q.push(root);
+    // Mirror DFS or Paired DFS
+    bool isMirror(TreeNode* a, TreeNode* b) {
+        if(a == NULL && b == NULL) return true;
+        if(a == NULL || b == NULL) return false;
+        if(a -> val != b -> val) return false;
 
-        while(!q.empty()) {
-            int sz = q.size();
-            vector<TreeNode*> inner;
-
-            while(sz--) {
-                TreeNode* curr = q.front();
-                q.pop();
-
-                inner.push_back(curr);
-                if(curr != NULL) {
-                    if(curr -> left) q.push(curr -> left);
-                    else q.push(NULL);
-                    if(curr -> right) q.push(curr -> right);
-                    else q.push(NULL);
-                }    
-            }
-
-            ans.push_back(inner);
-        }
-
-        return ans;
+        return isMirror(a -> left, b -> right) && isMirror(a -> right, b -> left);
     }
 
     bool isSymmetric(TreeNode* root) {
-        vector<vector<TreeNode*>> left = solve(root -> left);
-        vector<vector<TreeNode*>> right = solve(root -> right);
-        if(left.size() != right.size()) return false;
-
-        for(int i = 1; i < left.size(); i++) {
-            reverse(left[i].begin(), left[i].end());
-        }
-
-        for(int i = 0; i < left.size(); i++) {
-            if(left[i].size() != right[i].size()) return false;
-            
-            for(int j = 0; j < left[i].size(); j++) {
-                if(left[i][j] == NULL && right[i][j] == NULL) continue;
-                else if(left[i][j] == NULL || right[i][j] == NULL) return false;
-                else if(left[i][j] -> val != right[i][j] -> val) return false;
-            }
-        }
-
-        return true;
+        if(root == NULL) return true;
+        return isMirror(root -> left, root -> right);
     }
 };
