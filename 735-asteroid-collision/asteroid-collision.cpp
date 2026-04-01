@@ -1,30 +1,29 @@
 class Solution {
 public:
-    // for the current asteroid, we need just previous asteroid to check for collision
-    // but we also need to store other previous asteroids to check for more collision
-    // therefore, to store and remove the previous asteroids one by one, we need stack
-
     vector<int> asteroidCollision(vector<int>& asteroids) {
         int n = asteroids.size();
         stack<int> st;
 
-        for(auto x : asteroids) {
-            bool destroyed = false;
-
-            while(!st.empty() && st.top() > 0 && x < 0) {
-                if(st.top() < abs(x)) st.pop(); // prev explodes
-                else if(st.top() == abs(x)) {
-                    st.pop(); // both explodes
-                    destroyed = true;
-                    break; // break the loop when x explodes, and check for new x
-                }
-                else {
-                    destroyed = true;
-                    break;
-                }
+        for(int i = 0; i < n; i++) {
+            if(st.empty()) {
+                st.push(asteroids[i]);
+                continue;
             }
 
-            if(!destroyed) st.push(x);
+            if(!st.empty() && asteroids[i] > 0 && st.top() > 0) st.push(asteroids[i]);
+            else if(!st.empty() && (asteroids[i] < 0 || asteroids[i] > 0) && st.top() < 0) st.push(asteroids[i]); 
+            else if(!st.empty() && asteroids[i] < 0 && st.top() > 0) {
+                if(st.top() > abs(asteroids[i])) {
+                    continue; // smaller one will explode
+                }
+                else if(st.top() == abs(asteroids[i])) st.pop(); // both will explode
+                else {
+                    while(!st.empty() && st.top() < abs(asteroids[i]) && st.top() > 0) st.pop(); // keep removing the smaller ones
+                    if(st.empty() || st.top() < 0) st.push(asteroids[i]);
+                    else if(st.top() == abs(asteroids[i])) st.pop();
+                    // else, current destroyed
+                }
+            }
         }
 
         vector<int> ans;
