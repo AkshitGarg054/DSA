@@ -2,13 +2,16 @@ class Solution {
 public:
     vector<vector<int>> dp;
     int offset;
+    int sum;
 
     int solve(int index, int target, vector<int> &nums) {
-        if(index == nums.size()) return (target == 0);
+        if(index == nums.size()) {
+            if(target == 0) return 1;
+            else return 0;
+        }
 
-        // target + offset may become negative or exceed 2*sum
-        int k = dp[0].size();
-        if(target + offset < 0 || target + offset >= k) return 0;
+        // can't write: target + offset >= dp[0].size() 
+        if(target + offset < 0 || target + offset >= 2*sum + 1) return 0;
         if(dp[index][target + offset] != -1) return dp[index][target + offset];
 
         int add = solve(index + 1, target - nums[index], nums);
@@ -18,11 +21,12 @@ public:
     }
 
     int findTargetSumWays(vector<int>& nums, int target) {
-        int sum = 0;
-        for(auto x : nums) sum += x;
+        int n = nums.size();
+        sum = 0;
+        for(auto ele : nums) sum += ele;
 
         offset = sum;
-        dp.resize(nums.size(), vector<int>(2*sum + 1, -1));
+        dp.resize(n, vector<int>(2*sum + 1, -1));
         return solve(0, target, nums);
     }
 };
