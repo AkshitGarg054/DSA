@@ -3,19 +3,19 @@ public:
     vector<vector<int>> ans;
 
     void solve(int index, vector<int> &temp, vector<int> &nums) {
-        if(temp.size() >= 2) ans.push_back(temp);
+        if(index == nums.size()) {
+            if(temp.size() >= 2) ans.push_back(temp);
+            return;
+        }
 
-        unordered_set<int> vis;
+        if(temp.empty() || temp.back() <= nums[index]) {
+            temp.push_back(nums[index]);
+            solve(index + 1, temp, nums);
+            temp.pop_back();
+        }
 
-        for(int i = index; i < nums.size(); i++) { // subsequences are built in order, that's why started from i = index
-            if(vis.count(nums[i])) continue;
-
-            if(temp.empty() || temp.back() <= nums[i]) {
-                vis.insert(nums[i]);
-                temp.push_back(nums[i]);
-                solve(i + 1, temp, nums);
-                temp.pop_back();
-            }
+        if(temp.empty() || temp.back() != nums[index]) { // to avoid duplicate subsequences
+            solve(index + 1, temp, nums);
         }
     }
 
