@@ -1,27 +1,28 @@
 class Robot {
 public:
     int index = 0;
-    bool moved = false;
-    vector<vector<int>> pos;
+    bool moved = false; 
+    vector<vector<int>> pos; // pre-compute the positions (only boundaries)
 
     Robot(int width, int height) {
         for(int x = 0; x < width; x++) {
-            pos.push_back({x, 0, 0});
+            pos.push_back({x, 0, 0}); // East -> 0
         }
 
         for(int y = 1; y < height; y++) {
-            pos.push_back({width - 1, y, 1});
+            pos.push_back({width - 1, y, 1}); // North -> 1
         }
 
         for(int x = width - 2; x >= 0; x--) {
-            pos.push_back({x, height - 1, 2});
+            pos.push_back({x, height - 1, 2}); // West -> 2
         }
 
         for(int y = height - 2; y > 0; y--) {
-            pos.push_back({0, y, 3});
+            pos.push_back({0, y, 3}); // South -> 4
         }
 
-        pos[0][2] = 3;
+        // pos = {{0, 0, East(0)}, ....}
+        pos[0][2] = 3; // make it south when it again comes to (0, 0) after moving
     }
     
     void step(int num) {
