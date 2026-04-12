@@ -9,8 +9,7 @@ public:
         return abs(x1 - x2) + abs(y1 - y2);
     }
 
-    pair<int, int> get_coordinate(char ch) {
-        int position = ch - 'A'; // example: for 'C', position = 2
+    pair<int, int> get_coordinate(int position) {
         return {position / 6, position % 6}; // 6 is the number of columns
     }
 
