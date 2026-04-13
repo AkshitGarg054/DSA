@@ -3,12 +3,9 @@ public:
     vector<int> decrypt(vector<int>& code, int k) {
         int n = code.size();
 
-        vector<int> vec(code.begin(), code.end());
-        for(int i = 0; i < n; i++) vec.push_back(code[i]);
-
         vector<int> prefix(2*n + 1);
-        prefix[0] = vec[0];
-        for(int i = 1; i < 2*n; i++) prefix[i] = prefix[i-1] + vec[i];
+        prefix[0] = code[0];
+        for(int i = 1; i < 2*n; i++) prefix[i] = prefix[i-1] + code[i % n];
 
         vector<int> ans(n, 0);
 
