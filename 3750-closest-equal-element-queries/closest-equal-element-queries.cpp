@@ -13,12 +13,12 @@ public:
         for(int i = 0; i < 2*n; i++) {
             int ele = vec[i];
 
-            if(mp1.count(ele) && mp1[ele] != i) {
+            if(mp1.count(ele)) {
                 int index = mp1[ele];
                 if(i - index < n) next[index] = i - index;
-                mp1[ele] = i;
             }
-            else mp1[ele] = i;
+            
+            mp1[ele] = i;
         }
 
         unordered_map<int, int> mp2; // element --> index
@@ -28,20 +28,24 @@ public:
         for(int i = 2*n - 1; i >= 0; i--) {
             int ele = vec[i];
 
-            if(mp2.count(ele) && mp2[ele] != i) {
+            if(mp2.count(ele)) {
                 int index = mp2[ele];
                 if(index - i < n) prev[index] = index - i;
-                mp2[ele] = i;
             }
-            else mp2[ele] = i;
+
+            mp2[ele] = i;
         }
 
         vector<int> ans;
 
         for(auto i : queries) {
-            if(next[i] == -1 && prev[n + i] != -1) ans.push_back(prev[n + i]);
-            else if(next[i] != -1 && prev[n + i] == -1) ans.push_back(next[i]);
-            else ans.push_back(min(next[i], prev[n + i]));
+            int a = next[i];
+            int b = prev[n + i];
+
+            if(a == -1 && b == -1) ans.push_back(-1);
+            else if(a == -1) ans.push_back(b);
+            else if(b == -1) ans.push_back(a);
+            else ans.push_back(min(a, b));
         }
 
         return ans;
