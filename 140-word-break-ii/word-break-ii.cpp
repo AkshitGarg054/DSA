@@ -1,5 +1,12 @@
 class Solution {
 public:
+    // in this question, we learned a trick :
+    // if we add some string in a string temp --> say, temp = temp + str;
+    // and later, we want to remove that string, then how achieve this??? --> we can't simply do : temp = temp - str;
+    // to achieve this :
+    // we need to store the length of temp before adding str to it, and whenever we want to get the temp back, we can just resize to that len
+    // that is, len = temp.size(); --> temp = temp + str --> temp.resize(len);
+
     int n;
     vector<string> ans;
     unordered_set<string> st;
