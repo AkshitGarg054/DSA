@@ -1,39 +1,55 @@
 class Solution {
 public:
-    vector<int> dp;
-
-    int solve(int x, int y) {
-        if(x < y) return y - x; // because if x is smaller then we can only increment it by 1-1
-        if(x == y) return 0;
-
-        if(dp[x] != -1) return dp[x];
-
-        int dec = x - y; // cost of just decrementing
-
-        int by11 = INT_MAX;
-        if(x % 11 == 0) by11 = 1 + solve(x / 11, y);
-        else {
-            int rem = x % 11; // eg, x = 54, y = 2 --> we either do x = 44 or x = 55
-            int res1 = rem + 1 + solve((x - rem) / 11, y); // rem operations for decrementing x from 54 to 44 and 1 operation for division
-            int res2 = 11 - rem + 1 + solve((x + 11 - rem) / 11, y); 
-            by11 = min(res1, res2);
-        }
-        
-        int by5 = INT_MAX;
-        if(x % 5 == 0) by5 = 1 + solve(x / 5, y);
-        else {
-            int rem = x % 5;
-            int res1 = rem + 1 + solve((x - rem) / 5, y);
-            int res2 = 5 - rem + 1 + solve((x + 5 - rem) / 5, y);
-            by5 = min(res1, res2);
-        }
-
-        // NOTE :  we are only using increment operation to make x divisible by 11 or 5, if it is not.
-        return dp[x] = min({by11, by5, dec});
-    }
-
     int minimumOperationsToMakeEqual(int x, int y) {
-        dp.assign(x + 11, -1);
-        return solve(x, y);
+        queue<int> q;
+        q.push(x);
+
+        unordered_set<int> vis;
+        vis.insert(x);
+
+        int operations = 0;
+
+        while(!q.empty()) {
+            int sz = q.size();
+
+            while(sz--) {
+                int curr = q.front();
+                q.pop();
+
+                if(curr == y) return operations;
+
+                if(curr % 11 == 0) {
+                    int next = curr / 11;
+                    if(!vis.count(next)) {
+                        vis.insert(next);
+                        q.push(next);
+                    }
+                }
+
+                if(curr % 5 == 0) {
+                    int next = curr / 5;
+                    if(!vis.count(next)) {
+                        vis.insert(next);
+                        q.push(next);
+                    }
+                }
+
+                int inc = curr + 1;
+                if(!vis.count(inc)) {
+                    vis.insert(inc);
+                    q.push(inc);
+                }
+
+                int dec = curr - 1;
+                if(dec >= 0 && !vis.count(dec)) {
+                    vis.insert(dec);
+                    q.push(dec);
+                }
+            }
+
+            operations++;
+        }
+
+        return -1;
     }
 };
