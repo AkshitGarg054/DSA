@@ -1,12 +1,12 @@
 class Solution {
 public:
-    int dp[10010];
+    vector<int> dp;
 
     int solve(int x, int y) {
-        if(dp[x]!=-1) return dp[x];
         if(x < y) return y - x; // because if x is smaller then we can only increment it by 1-1
-        // if(x < 0) return INT_MAX;
         if(x == y) return 0;
+
+        if(dp[x] != -1) return dp[x];
 
         int dec = x - y;
 
@@ -33,7 +33,7 @@ public:
     }
 
     int minimumOperationsToMakeEqual(int x, int y) {
-        memset(dp,-1,sizeof(dp));
+        dp.assign(x + 11, -1);
         return solve(x, y);
     }
 };
