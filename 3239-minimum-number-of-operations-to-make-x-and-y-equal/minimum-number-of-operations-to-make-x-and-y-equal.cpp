@@ -8,7 +8,7 @@ public:
 
         if(dp[x] != -1) return dp[x];
 
-        int dec = x - y;
+        int dec = x - y; // cost of just decrementing
 
         int by11 = INT_MAX;
         if(x % 11 == 0) by11 = 1 + solve(x / 11, y);
