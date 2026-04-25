@@ -1,5 +1,11 @@
 class Solution {
 public:
+    // when a stone i is picked, Alice gains aliceValues[i] and Bob loses the chance to gain bobValues[i]
+    // so total impact of picking a stone = aliceValues[i] + bobValues[i]
+    // combine values : total[i] = aliceValues[i] + bobValues[i]
+    // sort stones in descending order of total 
+    // then start alternate picking : alice picks at even turns and bob picks at odd turns
+
     int stoneGameVI(vector<int>& aliceValues, vector<int>& bobValues) {
         int n = aliceValues.size();
         
