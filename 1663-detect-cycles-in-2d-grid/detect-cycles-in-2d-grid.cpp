@@ -15,7 +15,7 @@ public:
             if(!vis[ni][nj]) {
                 if(dfs(ni, nj, i, j, grid, vis)) return true;
             }
-            else if(vis[ni][nj] == true && (ni != pi || nj != pj)) return true;
+            else if(vis[ni][nj] == true && (ni != pi && nj != pj)) return true;
         }
 
         return false;
