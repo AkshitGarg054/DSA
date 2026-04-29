@@ -3,26 +3,22 @@ public:
     int minOperations(vector<vector<int>>& grid, int x) {
         vector<int> nums;
 
-        for (auto &row : grid) {
-            for (int val : row) {
-                nums.push_back(val);
+        for(auto i : grid) {
+            for(auto j : i) {
+                nums.push_back(j);
             }
         }
 
-        int rem = nums[0] % x;
-        for (int num : nums) {
-            if (num % x != rem) return -1;
-        }
-
         sort(nums.begin(), nums.end());
+        int mid = nums[nums.size() / 2];
+        int ans = 0;
 
-        int median = nums[nums.size() / 2];
-
-        int ops = 0;
-        for (int num : nums) {
-            ops += abs(num - median) / x;
+        for(int i = 0; i < nums.size(); i++) {
+            int diff = abs(nums[i] - mid);
+            if(diff % x != 0) return -1;
+            ans += (diff / x);
         }
 
-        return ops;
+        return ans;
     }
 };
