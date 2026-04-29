@@ -1,5 +1,10 @@
 class Solution {
 public:
+    // i am thinking of just finding the lcs and then traversing s1 and s2, and then checking which chars are not present in lcs and adding their ascii.
+    // Similar approach will be used but Normal LCS only maximizes number of characters, not their ASCII value.
+    // We just need to do one modification in LCS approach :
+    // Instead of maximizing length, maximize the sum of ascii values
+
     int minimumDeleteSum(string s1, string s2) {
         int n = s1.size();
         int m = s2.size();
