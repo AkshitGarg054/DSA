@@ -1,5 +1,14 @@
 class Solution {
 public:
+    // It is like weighted interval scheduling.
+    // We need to choose the intervals such that the gold is maximized.
+    // so, in short, for each index i, we will be having exactly one interval covering it.
+    // currently, we have multiple intervals covering an index i, but we want the best one.
+    // so, at each index i, we have two options :
+    // skip --> move to index i + 1
+    // take an offer startng at i --> then jump to end + 1
+    // to store all the offers starting at i, we will use an adjacency list.
+
     vector<int> dp;
 
     int solve(int index, vector<vector<pair<int, int>>>& list) {
