@@ -1,5 +1,15 @@
 class Solution {
 public:
+    // At each cell, track the best score you can get for every possible cost ≤ k.
+    // Since there’s a cost constraint, you can’t just store one value per cell — you must track multiple states based on cost.
+    // dp[i][j][c] = maximum score to reach (i, j) with total cost = c.
+    // For each possible cost :
+    // new_cost = c + cost(grid[i][j])
+    // new_score = dp[prev] + value(grid[i][j])
+    // and then, update : dp[i][j][new_cost] = max(dp[i][j][new_cost], new_score)
+    
+
+
     int maxPathScore(vector<vector<int>>& grid, int k) {
         int n = grid.size();
         int m = grid[0].size();
