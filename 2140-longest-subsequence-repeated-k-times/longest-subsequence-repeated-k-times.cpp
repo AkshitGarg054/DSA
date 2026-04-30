@@ -1,5 +1,10 @@
 class Solution {
 public:
+    // We can't search all subsequences.
+    // so let's try searching for only those subsequences which are build from characters that appear at least k times.
+    // we will create a freq array and create a temp string, formed by characters with freq >= k
+    // then we try to create different strings from that temp string by using BFS.
+
     bool isValid(string &s, string &seq, int k) {
         int i = 0, j = 0;
         int count = 0;
