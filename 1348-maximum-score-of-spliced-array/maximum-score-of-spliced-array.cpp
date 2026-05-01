@@ -1,5 +1,11 @@
 class Solution {
 public:
+    // Instead of swapping explicitly, what is the gain if I swap i subarray.
+    // If you swap [l..r], then gain for nums1 = (nums2[i] - nums1[i]) over i in [l..r]
+    // So, define diff[i] = nums2[i] - nums1[i]
+    // Now, problem becomes : find subarray with maximum sum in diff[]
+    // That is, kadane algo
+
     int kadane(vector<int> &arr) {
         int sum = 0, maxi = INT_MIN;
         
