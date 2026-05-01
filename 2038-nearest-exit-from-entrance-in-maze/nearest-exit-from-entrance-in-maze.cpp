@@ -1,45 +1,39 @@
 class Solution {
 public:
-    vector<vector<int>> dirs = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+    vector<vector<int>> dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
     int nearestExit(vector<vector<char>>& maze, vector<int>& entrance) {
         int n = maze.size();
         int m = maze[0].size();
 
+        int start_x = entrance[0];
+        int start_y = entrance[1];
+
         vector<vector<int>> vis(n, vector<int>(m, 0));
-        vis[entrance[0]][entrance[1]] = 1;
+        vis[start_x][start_y] = 1;
 
         queue<pair<int, int>> q;
+        q.push({start_x, start_y});
 
-        int sx = entrance[0], sy = entrance[1];
-        for(auto d : dirs) { // starting point is considered as the exit gate, so we need to start with its neighbors
-            int nx = sx + d[0];
-            int ny = sy + d[1];
-
-            if(nx >= 0 && ny >= 0 && nx < n && ny < m && maze[nx][ny] == '.' && !vis[nx][ny]) {
-                q.push({nx, ny});
-                vis[nx][ny] = 1;
-            }
-        }
-
-        int steps = 1;
+        int steps = 0;
 
         while(!q.empty()) {
             int sz = q.size();
 
             while(sz--) {
-                auto [x, y] = q.front();
+                auto [i, j] = q.front();
                 q.pop();
 
-                if(x == n-1 || x == 0 || y == 0 || y == m-1) return steps;
+                if((i == 0 || i == n-1 || j == 0 || j == m-1) && !(i == start_x && j == start_y)) return steps;
 
-                for(auto d : dirs) { 
-                    int nx = x + d[0];
-                    int ny = y + d[1];
+                for(auto &d : dirs) {
+                    int ni = i + d[0];
+                    int nj = j + d[1];
 
-                    if(nx >= 0 && ny >= 0 && nx < n && ny < m && maze[nx][ny] == '.' && !vis[nx][ny]) {
-                        q.push({nx, ny});
-                        vis[nx][ny] = 1;
+                    if(ni < 0 || nj < 0 || ni >= n || nj >= m) continue;
+                    if(!vis[ni][nj] && maze[ni][nj] == '.') {
+                        vis[ni][nj] = 1;
+                        q.push({ni, nj});
                     }
                 }
             }
