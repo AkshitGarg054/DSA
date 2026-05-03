@@ -3,7 +3,8 @@ public:
     // pehle to position ke hisaab se sort kr lenge dono array ko combine krke
     // Then, we will firstly just calculate ki har ek car ko target pe pohanchne me kitna time lgega
     // and store these time in a separate time array
-    // we will traverse that time array and if time[i + 1] > time[i] hua, then we will merge them
+    // we will traverse that time array from back. 
+    // (i mean, cars ek ek krke destination pe ayengi, aur jaisi hi aati jayengi we will update the fleets accordingly)
 
     int carFleet(int target, vector<int>& position, vector<int>& speed) {
         int n = speed.size();
