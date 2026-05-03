@@ -1,27 +1,21 @@
 class Solution {
 public:
-    int n;
-    vector<vector<int>> ans;
+    vector<vector<int>> subsets(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> ans;
 
-    void solve(int index, vector<int> &temp, vector<int> &nums) {
-        if(index == n) {
-            ans.push_back(temp);
-            return;
+        for(int mask = 0; mask < (1 << n); mask++) {
+            vector<int> subset;
+
+            for(int i = 0; i < n; i++) {
+                if(mask & (1 << i)) { // if ith bit is set in this mask
+                    subset.push_back(nums[i]);
+                }
+            }
+
+            ans.push_back(subset);
         }
 
-        // take
-        temp.push_back(nums[index]);
-        solve(index + 1, temp, nums);
-        temp.pop_back();
-
-        // not take
-        solve(index + 1, temp, nums);
-    }
-
-    vector<vector<int>> subsets(vector<int>& nums) {
-        n = nums.size();
-        vector<int> temp;
-        solve(0, temp, nums);
         return ans;
     }
 };
