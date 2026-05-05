@@ -1,33 +1,29 @@
 class Solution {
 public:
-    // whenever we need to rotate a LL by k right, then instead,
-    // rotate it by (n - k) left.
-
     ListNode* rotateRight(ListNode* head, int k) {
-        if(head == NULL || head -> next == NULL || k == 0) return head;
-
+        if(k == 0 || head == NULL) return head;
+        int total = 0;
         ListNode* temp = head;
-        int count = 0;
 
         while(temp != NULL) {
-            count++;
             temp = temp -> next;
+            total++;
         }
 
-        if(k >= count) k = k % count;
+        k = k % total;
         if(k == 0) return head;
+        int dest = total - k  - 1;
 
-        int x = count - k;
         temp = head;
-        for(int i = 0; i < x-1; i++) temp = temp -> next;
+        while(dest--) temp = temp -> next;
 
-        ListNode* head1 = temp -> next;
+        ListNode* start = temp -> next;
         temp -> next = NULL;
 
-        ListNode* temp1 = head1;
-        while(temp1 -> next != NULL) temp1 = temp1 -> next;
-        temp1 -> next = head;
+        temp = start;
+        while(temp != NULL && temp -> next != NULL) temp = temp -> next;
+        temp -> next = head;
 
-        return head1;
+        return start;
     }
 };
