@@ -1,5 +1,21 @@
 class Solution {
 public:
+    vector<vector<int>> dp;
+
+    int solve(int index, int budget, vector<int> &copies, vector<vector<int>> &items) {
+        if(index == items.size() || budget == 0) return 0;
+        if(dp[index][budget] != -1) return dp[index][budget];
+
+        int price = items[index][1];
+        int count = copies[index];
+
+        int take = INT_MIN;
+        if(budget >= price) take = count + solve(index + 1, budget - price, copies, items);
+        int skip = solve(index + 1, budget, copies, items);
+
+        return dp[index][budget] = max(take, skip);
+    }
+
     int maximumSaleItems(vector<vector<int>>& items, int budget) {
         int n = items.size();
         int min_price = INT_MAX;
@@ -11,35 +27,17 @@ public:
                 if(i != j && (items[j][0] % items[i][0] == 0)) copies[i]++;
             }
         }
-
-        // dp[i][j] stores the max items from a subset of the first 'i' types, spending at most 'j' budget on activations (free copies wala).
-        // This is the 0/1 knapsack
-        vector<vector<int>> dp(n + 1, vector<int>(budget + 1, 0));
-
-        // base cases: 0 items gained if budget is 0 or items considered is 0
-        for(int i = 0; i <= n; i++) dp[i][0] = 0;
-        for(int j = 0; j <= budget; j++) dp[0][j] = 0;
-
-        // fill the dp matrix row by row
-        for(int i = 1; i <= n; i++) {
-            int price = items[i - 1][1];
-            int count = copies[i - 1];
-
-            for(int j = 1; j <= budget; j++) {
-                if(j >= price) { 
-                    dp[i][j] = max(dp[i - 1][j], count + dp[i - 1][j - price]); // max(skip, take item) 
-                }
-                else dp[i][j] = dp[i - 1][j]; // not enough budget to activate, must skip
-            }
-        }
-
-        // find the remaining items with the remaining budget using the final row (dp[n])
-        // This is unbounded knapsack
+ 
+        dp.resize(n + 1, vector<int>(budget + 1, -1));
         int ans = 0;
+
+        // try every possible budget split
         for(int j = 0; j <= budget; j++) {
-            int rem = budget - j;
-            int extra_items = rem / min_price; // buy duplicate copies of the cheapest item
-            ans = max(ans, dp[n][j] + extra_items);
+            int max_items = solve(0, j, copies, items);
+
+            int budget_left = budget - j;
+            int extra_items = budget_left / min_price;
+            ans = max(ans, max_items + extra_items);
         }
 
         return ans;
