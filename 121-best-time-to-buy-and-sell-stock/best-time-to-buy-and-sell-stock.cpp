@@ -1,22 +1,16 @@
 class Solution {
 public:
-    // no need for DP here.
-    // this is not like, buy -> sell -> buy -> sell........
-    // it is just buy -> sell -> stop.
-    // for every element on left, we want a greater element on the right
-    // and take the one, which is giving the max profit.
-    // basically, we want minimum from left and maximum from right.
-
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
-        int mini = INT_MAX;
-        int profit = 0;
+        int mini = prices[0];
+        int ans = INT_MIN;
 
-        for(int i = 0; i < n; i++) {
+        for(int i = 1; i < n; i++) {
+            ans = max(ans, prices[i] - mini);
             mini = min(mini, prices[i]);
-            profit = max(profit, prices[i] - mini);
         }
 
-        return profit;
+        if(ans < 0) return 0;
+        return ans;
     }
 };
