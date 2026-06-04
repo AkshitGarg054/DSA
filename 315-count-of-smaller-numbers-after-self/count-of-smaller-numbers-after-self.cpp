@@ -1,5 +1,7 @@
 class Solution {
 public:
+    // This is the modification on count inversions problem.
+
     void merge(vector<pair<int, int>> &arr, int low, int mid, int high, vector<int> &count) {
         int left = low;
         int right = mid + 1;
