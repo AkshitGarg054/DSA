@@ -3,31 +3,18 @@ public:
     vector<int> twoSum(vector<int>& nums, int target) {
         int n = nums.size();
 
-        vector<pair<int, int>> v;
-        for(int i=0; i < n; i++) {  
-            v.push_back({nums[i], i});  
-        }  
+        vector<pair<int, int>> vec(n);
+        for(int i = 0; i < n; i++) vec[i] = {nums[i], i};
 
-        // v will be sorted by value
-        sort(v.begin(), v.end());  
-        int i = 0;
-        int j = n - 1;
-        
+        sort(vec.begin(), vec.end());
+        int i = 0, j = n - 1;
+
         while(i < j) {
-            int left = v[i].first;
-            int right = v[j].first;
-
-            if(left + right < target) {
-                i++;
-            }
-            else if(left + right > target) {
-                j--;
-            }
-            else {
-                return {v[i].second, v[j].second};
-            }
+            if(vec[i].first + vec[j].first == target) return {vec[i].second, vec[j].second};
+            else if(vec[i].first + vec[j].first > target) j--;
+            else i++;
         }
 
-        return {-1};
+        return {-1, -1};
     }
 };
