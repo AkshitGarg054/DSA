@@ -1,30 +1,26 @@
 class Solution {
 public:
-    int longestStrChain(vector<string>& words) {
-        int n = words.size();
+    unordered_set<string> m;
+    unordered_map<string, int> dp;
 
-        unordered_map<string, int> mp; // stores the length of longest chain till a word
-        for(auto word: words) mp[word] = 1;
-
-        sort(words.begin(), words.end(), [&](string &a, string &b) {
-            return a.size() < b.size();
-        });
-
+    int solve(string& s) {
+        if(dp.count(s)) return dp[s];
         int maxi = 1;
 
-        for(int i = 0; i < n; i++) {
-            string word = words[i];
-            int curr_maxi = mp[word];
-            
-            for(int j = 0; j < word.size(); j++) {
-                string temp = word.substr(0, j) + word.substr(j + 1);
-                if(mp.count(temp)) curr_maxi = max(curr_maxi, mp[temp] + 1);
-            }
-
-            mp[word] = curr_maxi;
-            maxi = max(maxi, curr_maxi);
+        for (int i = 0; i < s.length(); i++) {
+            string temp = s;
+            temp.erase(i, 1);
+            if (m.count(temp)) maxi = max(maxi, 1 + solve(temp));
         }
 
-        return maxi;
+        return dp[s] = maxi;
+    }
+
+    int longestStrChain(vector<string>& words) {
+        for(auto& w : words) m.insert(w);
+        int ans = 1;
+
+        for (auto& w : words) ans = max(ans, solve(w));
+        return ans;
     }
 };
