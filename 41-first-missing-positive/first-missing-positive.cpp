@@ -3,16 +3,20 @@ public:
     int firstMissingPositive(vector<int>& nums) {
         int n = nums.size();
 
-        map<int, bool> mp; // ordered map is needed to maintain the order of numbers from 1 to n
-        for(int i = 1; i <= n; i++) mp[i] = false;
-
         for(int i = 0; i < n; i++) {
-            int ele = nums[i];
-            if(mp.count(ele)) mp[ele] = true;
+            if(nums[i] < 1 || nums[i] > n) nums[i] = n + 1;
         }
 
-        for(auto [key, val]: mp) {
-            if(val == false) return key;
+        for(int i = 0; i < n; i++) {
+            int ele = abs(nums[i]);
+            if(ele > n) continue;
+ 
+            int index = ele - 1;
+            if(nums[index] > 0) nums[index] = -nums[index];
+        }
+
+        for(int i = 0; i < n; i++) {
+            if(nums[i] > 0) return i + 1;
         }
 
         return n + 1;
