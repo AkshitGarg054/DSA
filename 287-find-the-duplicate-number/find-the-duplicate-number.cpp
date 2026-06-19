@@ -1,25 +1,17 @@
 class Solution {
 public:
+    // approach 2: going to arr[i] position and replacing the ele at that pos with -ve sign
+
     int findDuplicate(vector<int>& nums) {
         int n = nums.size();
-        int low = 0, high = n - 1;
-        int duplicate = -1;
+        
+        for(int i = 0; i < n; i++) {
+            int pos = abs(nums[i]);
 
-        while(low <= high) {
-            int mid = low + (high - low) / 2;
-
-            int count = 0;
-            for(int i = 0; i < n; i++) {
-                if(nums[i] <= mid) count++;
-            }
-
-            if(count > mid) {
-                duplicate = mid;
-                high = mid - 1;
-            }
-            else low = mid + 1;
+            if(nums[pos] < 0) return abs(nums[i]);
+            else nums[pos] = -nums[pos];            
         }
-
-        return duplicate;
+        
+        return -1;
     }
 };
