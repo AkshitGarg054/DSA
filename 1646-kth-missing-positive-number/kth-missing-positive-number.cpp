@@ -1,23 +1,16 @@
 class Solution {
 public:
-    // approach 1: using hash-map
+    // approach 2: using set
     int findKthPositive(vector<int>& arr, int k) {
         int n = arr.size();
-        cout << n << endl;
 
-        map<int, int> mp;
-        for(int i = 1; i <= n + k; i++) mp[i] = false; // (n + k) is the enough range to find an answer
-
-        for(int i = 0; i < n; i++) {
-            int ele = arr[i];
-            mp[ele] = true;
-        }
-
+        unordered_set<int> st(arr.begin(), arr.end());
         int count = 0;
-        for(auto [key, val]: mp) {
-            if(val == false) {
+
+        for(int x = 1; ; x++) {
+            if(!st.count(x)) {
                 count++;
-                if(count == k) return key;
+                if(count == k) return x;
             }
         }
 
