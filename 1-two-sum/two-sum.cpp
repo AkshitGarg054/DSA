@@ -3,15 +3,19 @@ public:
     vector<int> twoSum(vector<int>& nums, int target) {
         int n = nums.size();
 
-        vector<pair<int, int>> vec(n);
-        for(int i = 0; i < n; i++) vec[i] = {nums[i], i};
+        vector<pair<int, int>> arr(n);
+        for(int i = 0; i < n; i++) arr[i] = {nums[i], i};
 
-        sort(vec.begin(), vec.end());
+        sort(arr.begin(), arr.end());
+
         int i = 0, j = n - 1;
 
         while(i < j) {
-            if(vec[i].first + vec[j].first == target) return {vec[i].second, vec[j].second};
-            else if(vec[i].first + vec[j].first > target) j--;
+            int ele1 = arr[i].first;
+            int ele2 = arr[j].first;
+
+            if(ele1 + ele2 == target) return {arr[i].second, arr[j].second};
+            else if(ele1 + ele2 > target) j--;
             else i++;
         }
 
