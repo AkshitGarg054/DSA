@@ -1,17 +1,30 @@
 class Solution {
 public:
-    // approach 2: going to arr[i] position and replacing the ele at that pos with -ve sign
+    // approach 3: tortoise and hare algo
 
     int findDuplicate(vector<int>& nums) {
         int n = nums.size();
-        
-        for(int i = 0; i < n; i++) {
-            int pos = abs(nums[i]);
+        int slow = nums[0];
+        int fast = nums[0];
 
-            if(nums[pos] < 0) return abs(nums[i]);
-            else nums[pos] = -nums[pos];            
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+
+        // detect cycle
+        while(slow != fast) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
         }
-        
-        return -1;
+
+        // move slow pointer back to start
+        slow = nums[0];
+
+        // keep moving both by 1
+        while(slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        return slow; // or fast
     }
 };
