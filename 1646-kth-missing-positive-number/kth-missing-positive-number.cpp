@@ -1,5 +1,6 @@
 class Solution {
 public:
+    // approach 1: using hash-map
     int findKthPositive(vector<int>& arr, int k) {
         int n = arr.size();
         cout << n << endl;
