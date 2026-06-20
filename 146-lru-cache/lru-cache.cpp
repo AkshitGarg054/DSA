@@ -1,37 +1,76 @@
 class LRUCache {
-private:
-    int capacity;
-    list<pair<int, int>> dll; // the list stores pairs of {key, val}
-    unordered_map<int, list<pair<int, int>>::iterator> mp; // the map links the key to the exact location (iterator) of the node in the list
-
 public:
+    class Node {
+    public:
+        int key, val;
+        Node* prev;
+        Node* next;
+
+        Node(int k, int v) {
+            key = k;
+            val = v;
+            prev = next = NULL;
+        }
+    };
+
+    Node* head = new Node(-1, -1);
+    Node* tail = new Node(-1, -1);  
+
+    unordered_map<int, Node*> mp;
+    int capacity;
+
+    void addNode(Node* newNode) {
+        Node* oldNode = head -> next;
+
+        head -> next = newNode;
+        oldNode -> prev = newNode;
+
+        newNode -> next = oldNode;
+        newNode -> prev = head;
+    }
+
+    void delNode(Node* oldNode) {
+        Node* oldPrev = oldNode -> prev;
+        Node* oldNext = oldNode -> next;
+
+        oldPrev -> next = oldNext;
+        oldNext -> prev = oldPrev;
+    }
+
     LRUCache(int capacity) {
         this -> capacity = capacity;
+        head -> next = tail;
+        tail -> prev = head;
     }
     
     int get(int key) {
         if(!mp.count(key)) return -1;
 
-        // if key exists, move it to the front using splice
-        dll.splice(dll.begin(), dll, mp[key]); // splice(destination, source_list, element_iterator)
-        return mp[key] -> second; // return the value 
+        Node* getNode = mp[key];
+        int ans = getNode -> val;
+
+        mp.erase(key);
+        delNode(getNode);
+        addNode(getNode);
+
+        mp[key] = head -> next;
+        return ans;
     }
     
     void put(int key, int value) {
         if(mp.count(key)) {
-            mp[key] -> second = value;
-            dll.splice(dll.begin(), dll, mp[key]);
-            return;
+            Node* oldNode = mp[key];
+            delNode(oldNode);
+            mp.erase(key);
         }
 
-        if(dll.size() == capacity) {
-            int lru_key = dll.back().first;
-            dll.pop_back();
-            mp.erase(lru_key);
+        if(mp.size() == capacity) {
+            mp.erase(tail -> prev -> key);
+            delNode(tail -> prev);
         }
 
-        // insert the new key-value pair at the front
-        dll.push_front({key, value});
-        mp[key] = dll.begin(); // store its iterator in the map
+        Node* newNode = new Node({key, value});
+        addNode(newNode);
+        mp[key] = newNode;
     }
 };
