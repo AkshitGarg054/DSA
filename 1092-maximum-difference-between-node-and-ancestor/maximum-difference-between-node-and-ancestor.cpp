@@ -1,28 +1,28 @@
 class Solution {
 public:
-    // looks like DFS.
-    // whenever answer depends on values above or below the node, we can think of DFS.
-    // The pattern is :
-    // either pass useful information in DFS, 
-    // or return useful information from DFS.
-    int ans = 0;
+    int ans = INT_MIN;
 
-    void dfs(TreeNode* curr, int mini, int maxi) {
-        if(curr == NULL) return;
+    int solve(TreeNode* root, int x) {
+        if(root == NULL) return -1e9;
 
-        // calculate updated ans (absolute diff of mini and maxi with curr val)
-        ans = max(ans, max(abs(curr -> val - mini), abs(curr -> val - maxi)));
+        int left = solve(root -> left, x);
+        int right = solve(root -> right, x);
 
-        // calculate mini and maxi including curr node for passing to next recursive call
-        mini = min(mini, curr -> val);
-        maxi = max(maxi, curr -> val);
+        return max({left, right, abs(root -> val - x)});
+    }
 
-        dfs(curr -> left, mini, maxi);
-        dfs(curr -> right, mini, maxi);
+    void solve_node(TreeNode* root) {
+        if(root == NULL) return;
+
+        ans = max(ans, solve(root, root -> val));
+        solve_node(root -> left);
+        solve_node(root -> right);
     }
 
     int maxAncestorDiff(TreeNode* root) {
-        dfs(root, root -> val, root -> val); // mini, maxi
+        if(root == NULL) return 0;
+
+        solve_node(root);
         return ans;
     }
 };
