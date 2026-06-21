@@ -1,7 +1,6 @@
 class Solution {
 public:
-    // find NSE and PSE for every bar (but do not include the NS and PSE in area)
-
+    // for every rectangle, we want the next smaller and the previous smaller
     int largestRectangleArea(vector<int>& heights) {
         int n = heights.size();
         stack<int> st;
@@ -12,13 +11,13 @@ public:
                 int curr = st.top();
                 st.pop();
                 int nse = i;
-                int pse = (st.empty()) ? -1 : st.top();
+                int pse = st.empty() ? -1 : st.top();
                 int width = nse - pse - 1;
 
-                int area = heights[curr] * width;
+                int area = width * heights[curr];
                 ans = max(ans, area);
             }
-            
+
             st.push(i);
         }
 
@@ -26,11 +25,11 @@ public:
             int curr = st.top();
             st.pop();
             int nse = n;
-            int pse = (st.empty()) ? -1 : st.top();
+            int pse = st.empty() ? -1 : st.top();
             int width = nse - pse - 1;
 
-            int area = heights[curr] * width;
-            ans = max(area, ans);
+            int area = width * heights[curr];
+            ans = max(ans, area);
         }
 
         return ans;
