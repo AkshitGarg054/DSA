@@ -1,5 +1,9 @@
 class Solution {
 public:
+    // important edge case:
+    // nums = [2, 3, 8, 9, 10], target = 16 
+    // correct ouput = 15
+
     int threeSumClosest(vector<int>& nums, int target) {
         int n = nums.size();
         int min_diff = INT_MAX;
@@ -21,7 +25,7 @@ public:
 
                     if(diff < min_diff) {
                         min_diff = diff;
-                        dir = -1;
+                        dir = -1; // only update dir when diff < min_diff (to handle imp edge case)
                     }
 
                     j++;
