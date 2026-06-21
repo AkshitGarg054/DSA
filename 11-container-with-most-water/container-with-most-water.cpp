@@ -3,17 +3,18 @@ public:
     int maxArea(vector<int>& height) {
         int n = height.size();
 
-        int low = 0, high = n-1;
-        int ans = INT_MIN;
+        int l = 0, r = n - 1;
+        int maxi = INT_MIN;
 
-        while(low < high) {
-            int h = min(height[low], height[high]);
-            ans = max(ans, h * (high - low));
+        while(l < r) {
+            int h = min(height[l], height[r]);
+            int w = r - l;
+            maxi = max(maxi, h * w);
 
-            if(height[low] < height[high]) low++;
-            else high--;
+            if(height[l] < height[r]) l++;
+            else r--;
         }
 
-        return ans;
+        return maxi;
     }
 };
