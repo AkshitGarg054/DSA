@@ -1,25 +1,19 @@
 class Solution {
 public:
-    // Expand window with r
-    // Track frequency of characters
-    // Track maxFreq
-    // changes needed in that window : window_size - max_freq
-    // If invalid -> shrink from left
-
-
+    // As longest repeating char ki baat ho rhi haii, so we can use a map
     int characterReplacement(string s, int k) {
         int n = s.size();
 
         unordered_map<char, int> mp;
-        int max_freq = 0;
         int l = 0, r = 0;
-        int ans = 0;
+        int max_freq = INT_MIN;
+        int ans = INT_MIN;
 
         while(r < n) {
             mp[s[r]]++;
             max_freq = max(max_freq, mp[s[r]]);
 
-            while((r - l + 1) - max_freq > k) { // more than k changes
+            while((r - l + 1) - max_freq > k) {
                 mp[s[l]]--;
                 l++;
             }
