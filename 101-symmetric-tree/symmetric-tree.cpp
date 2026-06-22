@@ -1,16 +1,18 @@
 class Solution {
 public:
-    // Mirror DFS or Paired DFS
-    bool isMirror(TreeNode* a, TreeNode* b) {
-        if(a == NULL && b == NULL) return true;
-        if(a == NULL || b == NULL) return false;
-        if(a -> val != b -> val) return false;
+    bool solve(TreeNode* p, TreeNode* q) {
+        if(p == NULL && q == NULL) return true;
+        if(p == NULL || q == NULL) return false;
+        if(p -> val != q -> val) return false;
 
-        return isMirror(a -> left, b -> right) && isMirror(a -> right, b -> left);
+        int left = solve(p -> left, q -> right);
+        int right = solve(p -> right, q -> left);
+
+        return left && right;
     }
 
     bool isSymmetric(TreeNode* root) {
         if(root == NULL) return true;
-        return isMirror(root -> left, root -> right);
+        return solve(root -> left, root -> right);
     }
 };
