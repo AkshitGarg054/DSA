@@ -1,10 +1,14 @@
 class MinStack {
 public:
-    stack<pair<int,int>> st; //the first is the actual element, second is the minimum
+    stack<pair<int, int>> st; // the first is the actual element, second is the minimum
+
+    MinStack() {
+        
+    }
     
-    void push(int val) {
-        if(st.size() > 0) st.push({val, min(val, st.top().second)});
-        else st.push({val, val});
+    void push(int value) {
+        if(st.size() > 0) st.push({value, min(value, st.top().second)});
+        else st.push({value, value});
     }
     
     void pop() {
