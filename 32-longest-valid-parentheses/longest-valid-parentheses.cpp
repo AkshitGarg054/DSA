@@ -1,27 +1,35 @@
 class Solution {
 public:
-    // To write a correct approach, knowing the chars isn't enough
-    // we need to know exactly where they are. (that is, their position)
-    // so, instead of pushing chars, we will push indices
+    // Approach 2: Two pass method by balancing the counters
     int longestValidParentheses(string s) {
         int n = s.size();
-        stack<int> st;
+        int left = 0, right = 0;
         int ans = 0;
 
-        st.push(-1); // initial base boundary
-
+        // left to right pass
         for(int i = 0; i < n; i++) {
-            if(s[i] == '(') st.push(i);
-            else {
-                st.pop(); // it can be either '(' or a previous boundary
+            if(s[i] == '(') left++;
+            else right++;
 
-                if(st.empty()) { // it means, that was a previous boundary
-                    st.push(i); // This ')' is invalid and forms a new base boundary
-                }
-                else {
-                    int len = i - st.top();
-                    ans = max(ans, len);
-                }
+            if(left == right) ans = max(ans, left * 2);
+            else if(right > left) {
+                left = 0;
+                right = 0;
+            }
+        }
+
+        left = 0;
+        right = 0;
+
+        // right to left pass
+        for(int i = n - 1; i >= 0; i--) {
+            if(s[i] == '(') left++;
+            else right++;
+
+            if(left == right) ans = max(ans, left * 2);
+            else if(left > right) {
+                left = 0;
+                right = 0;
             }
         }
 
