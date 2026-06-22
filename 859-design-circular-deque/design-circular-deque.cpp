@@ -1,75 +1,69 @@
 class MyCircularDeque {
 public:
-    vector<int> deq;
+    vector<int> q;
+    int sz, capacity;
     int front, rear;
-    int k, count;
 
     MyCircularDeque(int k) {
-        this -> k = k;
+        q.resize(k);
+        sz = 0;
+        capacity = k;
+        
         front = 0;
-        rear = k-1;
-        deq.resize(k, 0);
-        count = 0;
+        rear = k - 1; // IMPORTANT CHANGE 1 from circular queue: Initialize rear to k - 1 instead of -1
     }
     
     bool insertFront(int value) {
-        if(isFull()) return false;
-        front = (front - 1 + k) % k;
-        deq[front] = value;
-        count++;
+        if (isFull()) return false;
+        
+        // IMPORTANT CHANGE 2: Stepping backwards in a circular array
+        front = (front - 1 + capacity) % capacity;
+        q[front] = value;
+        sz++;
         return true;
     }
     
     bool insertLast(int value) {
-        if(isFull()) return false;
-        rear = (rear + 1) % k;
-        deq[rear] = value;
-        count++;
+        if (isFull()) return false;
+        
+        rear = (rear + 1) % capacity;
+        q[rear] = value;
+        sz++;
         return true;
     }
     
     bool deleteFront() {
-        if(isEmpty()) return false;
-        front = (front + 1) % k;
-        count--;
+        if (isEmpty()) return false;
+        
+        front = (front + 1) % capacity;
+        sz--;
         return true;
     }
     
     bool deleteLast() {
-        if(isEmpty()) return false;
-        rear = (rear - 1 + k) % k;
-        count--;
+        if (isEmpty()) return false;
+        
+        // IMPORTANT CHANGE 2: Stepping backwards in a circular array
+        rear = (rear - 1 + capacity) % capacity;
+        sz--;
         return true;
     }
     
     int getFront() {
-        if(isEmpty()) return -1;
-        return deq[front];
+        if (isEmpty()) return -1;
+        return q[front];
     }
     
     int getRear() {
-        if(isEmpty()) return -1;
-        return deq[rear];
+        if (isEmpty()) return -1;
+        return q[rear];
     }
     
     bool isEmpty() {
-        return count == 0;
+        return sz == 0;
     }
     
     bool isFull() {
-        return count == k;
+        return sz == capacity;
     }
 };
-
-/**
- * Your MyCircularDeque object will be instantiated and called as such:
- * MyCircularDeque* obj = new MyCircularDeque(k);
- * bool param_1 = obj->insertFront(value);
- * bool param_2 = obj->insertLast(value);
- * bool param_3 = obj->deleteFront();
- * bool param_4 = obj->deleteLast();
- * int param_5 = obj->getFront();
- * int param_6 = obj->getRear();
- * bool param_7 = obj->isEmpty();
- * bool param_8 = obj->isFull();
- */
