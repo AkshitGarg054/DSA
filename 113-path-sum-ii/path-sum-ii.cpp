@@ -1,29 +1,29 @@
 class Solution {
 public:
-    // When we get back from recursion, the changes in the variables/vectors etc are undone as we roll back because the call stack is cleared. Because in every stack a new copy of variables are created (if you haven’t passed them from reference & operator)
-// SO, if you pass your variables with reference, then no new copy of that is made of recursive call. The same variable goes through all calls. In that case, you will have to explicitly remove element. 
-// I would suggest you to pass tmp by reference and see what happens . You will understand for sure
-
     vector<vector<int>> ans;
+    int sum = 0;
 
-    void solve(int sum, TreeNode* root, vector<int> temp, int target) {
+    void solve(TreeNode* root, int target, vector<int> &path) {
         if(root == NULL) return;
 
         sum += root -> val;
-        temp.push_back(root -> val);
-
+        path.push_back(root -> val);
         if(root -> left == NULL && root -> right == NULL) {
-            if(sum == target) ans.push_back(temp);
-            return;
-        }
+            if(sum == target) ans.push_back(path);
+        } 
 
-        solve(sum, root -> left, temp, target);
-        solve(sum, root -> right, temp, target);
+        solve(root -> left, target, path);
+        solve(root -> right, target, path);
+        
+        sum -= root -> val; // backtrack
+        path.pop_back();
     }
 
     vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
-        vector<int> temp;
-        solve(0, root, temp, targetSum);
+        if(root == NULL) return ans;
+
+        vector<int> path;
+        solve(root, targetSum, path);
         return ans;
     }
 };
