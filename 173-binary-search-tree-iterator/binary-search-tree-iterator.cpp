@@ -1,29 +1,28 @@
 class BSTIterator {
 public:
-    // This approach uses O(n) space
+    // very important question to understand the new concept of finding the inorder traversal using stack
+    stack<TreeNode*> st;
 
-    vector<int> vec;
-    int ptr;
-
-    void inorder(TreeNode* root) {
+    void storeLeft(TreeNode* root) {
         if(root == NULL) return;
-
-        inorder(root -> left);
-        vec.push_back(root -> val);
-        inorder(root -> right);
+        while(root != NULL) {
+            st.push(root);
+            root = root -> left;
+        }
     }
 
     BSTIterator(TreeNode* root) {
-        inorder(root);
-        ptr = -1;
+        storeLeft(root);
     }
     
     int next() {
-        ptr++;
-        return vec[ptr];
+        auto ans = st.top();
+        st.pop();
+        if(ans -> right != NULL) storeLeft(ans -> right);
+        return ans -> val;
     }
     
     bool hasNext() {
-        return (ptr + 1 < vec.size()); 
+        return st.size() > 0;
     }
 };
