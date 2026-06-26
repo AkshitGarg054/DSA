@@ -2,6 +2,7 @@ class Solution {
 public:
     // Why we need to mark the visited??
     // If a word has already been discovered by BFS once, there is never any benefit in discovering it again later.
+    // because BFS explores level by level, the first time you discover any word, you've already found the shortest possible path to it.
 
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         unordered_set<string> st(wordList.begin(), wordList.end());
