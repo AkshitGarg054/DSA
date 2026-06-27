@@ -5,6 +5,8 @@ public:
     // When we process an edge [u, v], we connect (Union) the set containing u with the set containing v.
     // If we process an edge [u, v] and find that u and v are already in the same set, it means there is already a path between them. Adding this new edge directly connects them again, forming a cycle!
 
+    // So, we can say that if we want to find cycle in a graph, then we can use UNION-FIND algo, but note that Union-Find is only used to detect cycles in UNDIRECTED graphs. For directed graphs, we can instead use DFS (tracking nodes in the current recursion stack) or Kahn's Algorithm (Topological Sort) to find cycles.
+
     vector<int> parent;
 
     int find(int x) {
