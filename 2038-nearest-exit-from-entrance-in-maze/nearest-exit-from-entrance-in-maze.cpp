@@ -4,16 +4,13 @@ public:
 
     int nearestExit(vector<vector<char>>& maze, vector<int>& entrance) {
         int n = maze.size();
-        int m = maze[0].size();
-
-        int start_x = entrance[0];
-        int start_y = entrance[1];
-
-        vector<vector<int>> vis(n, vector<int>(m, 0));
-        vis[start_x][start_y] = 1;
+        int m = maze[0].size(); 
+        int start_r = entrance[0];
+        int start_c = entrance[1];
 
         queue<pair<int, int>> q;
-        q.push({start_x, start_y});
+        q.push({start_r, start_c});
+        maze[start_r][start_c] = '+';
 
         int steps = 0;
 
@@ -21,19 +18,21 @@ public:
             int sz = q.size();
 
             while(sz--) {
-                auto [i, j] = q.front();
+                auto [r, c] = q.front();
                 q.pop();
 
-                if((i == 0 || i == n-1 || j == 0 || j == m-1) && !(i == start_x && j == start_y)) return steps;
+                if(r != start_r || c != start_c) { // ~(r == start_r && c == start_c)
+                    if(r == 0 || r == n-1 || c == 0 || c == m-1) return steps;
+                }
 
-                for(auto &d : dirs) {
-                    int ni = i + d[0];
-                    int nj = j + d[1];
+                for(auto &d: dirs) {
+                    int nr = r + d[0];
+                    int nc = c + d[1];
 
-                    if(ni < 0 || nj < 0 || ni >= n || nj >= m) continue;
-                    if(!vis[ni][nj] && maze[ni][nj] == '.') {
-                        vis[ni][nj] = 1;
-                        q.push({ni, nj});
+                    if(nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
+                    if(maze[nr][nc] != '+') {
+                        maze[nr][nc] = '+'; // mark visited
+                        q.push({nr, nc});
                     }
                 }
             }
