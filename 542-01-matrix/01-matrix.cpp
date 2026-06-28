@@ -1,9 +1,10 @@
 class Solution {
 public:
-    // instead of applying BFS from each 1 to the nearest zero.
-    // apply BFS from all 0's at once.
+    // we need to apply BFS for each cell?
+    // instead of running BFS from every 1
+    // run BFS from all 0s at once
 
-    vector<vector<int>> dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    vector<vector<int>> dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
 
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
         int n = mat.size();
@@ -22,17 +23,18 @@ public:
         }
 
         while(!q.empty()) {
-            auto [x, y] = q.front();
+            auto [r, c] = q.front();
             q.pop();
 
-            for(auto d : dirs) {
-                int nx = x + d[0];
-                int ny = y + d[1];
+            for(auto &d: dirs) {
+                int nr = r + d[0];
+                int nc = c + d[1];
 
-                if(nx >= 0 && nx < n && ny >= 0 && ny < m && dist[nx][ny] == -1) {
-                    dist[nx][ny] = dist[x][y] + 1;
-                    q.push({nx, ny});
-                }
+                if(nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
+                if(dist[nr][nc] == -1) {
+                    dist[nr][nc] = dist[r][c] + 1;
+                    q.push({nr, nc});
+                } 
             }
         }
 
