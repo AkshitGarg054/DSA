@@ -1,51 +1,40 @@
 class Solution {
 public:
-    // Similar matrix question are seen in DP also.
-    // To identify DP or graph --
-    // Use graphs when :
-    // There are multiple directions from a point.
-    // We want the shortest path.
-    // Can revisit cells
-    // Use DP when :
-    // Overlapping subproblems
-    // Directions are restricted.
-    // Problem is about counting/optimizing over choices.
-
-    vector<vector<int>> dirs = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
+    vector<vector<int>> dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
 
     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
         int n = grid.size();
-        if(grid[0][0] == 1 || grid[n-1][n-1] == 1) return -1;
+        int m = grid[0].size();
+        if(grid[0][0] == 1 || grid[n-1][m-1] == 1) return -1;
 
         queue<pair<int, int>> q;
-        q.push({0, 0}); // {row, col}
+        q.push({0, 0});
+        grid[0][0] = 1; // mark source visited
 
-        vector<vector<int>> vis(n, vector<int>(n, 0));
-        vis[0][0] = 1;
-
-        int steps = 1;
+        int level = 1;
 
         while(!q.empty()) {
             int sz = q.size();
 
             while(sz--) {
-                auto [x, y] = q.front();
+                auto [r, c] = q.front();
                 q.pop();
 
-                if(x == n-1 && y == n-1) return steps;
+                if(r == n - 1 && c == m - 1) return level;
 
-                for(auto d : dirs) {
-                    int nx = x + d[0];
-                    int ny = y + d[1];
+                for(auto &d: dirs) {
+                    int nr = r + d[0];
+                    int nc = c + d[1];
 
-                    if(nx >= 0 && ny >= 0 && nx < n && ny < n && grid[nx][ny] == 0 && !vis[nx][ny]) {
-                        q.push({nx, ny});
-                        vis[nx][ny] = 1;
+                    if(nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
+                    if(grid[nr][nc] == 0) {
+                        grid[nr][nc] = 1; // mark visited
+                        q.push({nr, nc});
                     }
                 }
             }
 
-            steps++;
+            level++;
         }
 
         return -1;
