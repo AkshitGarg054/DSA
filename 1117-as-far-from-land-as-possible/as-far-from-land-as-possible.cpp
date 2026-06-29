@@ -1,8 +1,9 @@
 class Solution {
 public:
-    // we will start from all 1's together and cover all the zeros. 
-    // steps will give the minimum number of steps to reach the farthest zero from the nearest 1.
-    // (sb zeros ka apna apna nearest 1 hoga. Jb sabhi 1's pe BFS lgake 0s tk pohanchenge to jo zero 1 se sbse zyada dur hai usko visit kre bina loop khtm ni hoga)
+    // for every 0 cell, calculate the distance to its nearest 1
+    // and then take the maximum of all distances.
+    // instead of running BFS from all 0s one by one
+    // run BFS from all 1s together, the last zero reached will be our answer
 
     vector<vector<int>> dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
@@ -10,15 +11,10 @@ public:
         int n = grid.size();
         int m = grid[0].size();
 
-        vector<vector<int>> vis(n, vector<int>(m, 0));
         queue<pair<int, int>> q;
-
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < m; j++) {
-                if(grid[i][j] == 1) {
-                    vis[i][j] = 1;
-                    q.push({i, j});
-                }
+                if(grid[i][j] == 1) q.push({i, j});
             }
         }
 
@@ -26,27 +22,28 @@ public:
 
         while(!q.empty()) {
             int sz = q.size();
-            bool updated = false;
+            bool added = false;
 
             while(sz--) {
-                auto [x, y] = q.front();
+                auto [r, c] = q.front();
                 q.pop();
 
-                for(auto d : dirs) {
-                    int nx = x + d[0];
-                    int ny = y + d[1];
+                for(auto &d: dirs) {
+                    int nr = r + d[0];
+                    int nc = c + d[1];
 
-                    if(nx >= 0 && nx < n && ny >= 0 && ny < m && grid[nx][ny] == 0 && !vis[nx][ny]) {
-                        vis[nx][ny] = 1;
-                        updated = true;
-                        q.push({nx, ny});
+                    if(nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
+                    if(grid[nr][nc] == 0) {
+                        grid[nr][nc] = 1;
+                        q.push({nr, nc});
+                        added = true;
                     }
                 }
             }
 
-            if(updated) steps++;
+            if(added) steps++;
         }
-
+        
         if(steps == 0) return -1;
         return steps;
     }
