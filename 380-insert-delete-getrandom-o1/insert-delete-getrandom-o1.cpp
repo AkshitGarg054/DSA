@@ -1,7 +1,7 @@
 class RandomizedSet {
 public:
     vector<int> arr;
-    unordered_map<int, int> mp; // to store {val -> index} mapping for O(1) lookups
+    unordered_map<int, int> mp; // value -> index 
 
     RandomizedSet() {
         
@@ -13,7 +13,6 @@ public:
             mp[val] = arr.size() - 1;
             return true;
         }
-
         return false;
     }
     
@@ -24,10 +23,9 @@ public:
 
             swap(arr[index], arr.back());
             arr.pop_back();
-            
-            mp[last_val] = index;
-            mp.erase(val); // this needs to be below only (to handle the case where value removed is the last value itself)
 
+            mp[last_val] = index;
+            mp.erase(val); // this should be at the last, in order (to handle the case when val removed is the last val itself)
             return true;
         }
 
@@ -35,7 +33,7 @@ public:
     }
     
     int getRandom() {
-        int random_index = rand() % arr.size();
-        return arr[random_index];
+        int index = rand() % arr.size();
+        return arr[index];
     }
 };
