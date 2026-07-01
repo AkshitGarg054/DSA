@@ -6,41 +6,40 @@ public:
     // So, how to find these nodes??
     // We need to know the technique of how to detect a cycle in directed graph using DFS (tracking nodes in the current recursion stack ...used this technique in Course Schedule Problem).
 
-    bool checkCycle(int node, vector<int> &vis, vector<int> &inRecursion, vector<vector<int>>& graph) {
-        vis[node] = true;
-        inRecursion[node] = true;
-
-        for(auto &v: graph[node]) {
-            if(!vis[v]) {
-                if(checkCycle(v, vis, inRecursion, graph)) return true; // cycle is there
-            }
-            else if(vis[v] == true && inRecursion[v] == true) return true; // cycle is there
-        }
-
-        inRecursion[node] = false; // this will not be able to undo, if we found a cycle
-        return false; 
-    }
+    // we can also solve this using topological sort. (but we need to reverse the edges)
 
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
-        vector<int> vis(n, 0);
-        vector<int> inRecursion(n, 0);
-
+        vector<vector<int>> list(n);
+        vector<int> indegree(n, 0);
+        
         for(int i = 0; i < n; i++) {
-            if(!vis[i]) checkCycle(i, vis, inRecursion, graph);
+            for(auto &v: graph[i]) {
+                list[v].push_back(i);
+                indegree[i]++;
+            }
         }
 
-        // all the nodes for which inRecursion is true will be the non-safe nodes.
-        unordered_set<int> st;
+        queue<int> q;
         for(int i = 0; i < n; i++) {
-            if(inRecursion[i] == true) st.insert(i);
+            if(indegree[i] == 0) q.push(i);
         }
 
         vector<int> ans;
-        for(int i = 0; i < n; i++) {
-            if(!st.count(i)) ans.push_back(i);
+        
+        while(!q.empty()) {
+            int node = q.front();
+            q.pop();
+
+            ans.push_back(node);
+
+            for(auto &v: list[node]) {
+                indegree[v]--;
+                if(indegree[v] == 0) q.push(v);
+            }
         }
 
+        sort(ans.begin(), ans.end());
         return ans;
     }
 };
