@@ -1,28 +1,33 @@
 class Solution {
 public:
-    int n;
     unordered_set<string> st;
-    int dp[301];
+    vector<vector<int>> dp;
 
-    int solve(int index, string &s) {
-        if(index == n) return true;
-        if(dp[index] != -1) return dp[index];
+    bool solve(int i, int j, string s) {
+        if(i >= s.size() && j >= s.size()) return true;
+        if(j > s.size()) return false;
+        if(dp[i][j] != -1) return dp[i][j];
 
-        for(int i = index; i < n; i++) {
-            string temp = s.substr(index, i - index + 1);
-            if(st.count(temp)) {
-                if(solve(i + 1, s) == true) return dp[index] = true;
-            }
+        string curr = s.substr(i, j - i + 1);
+
+        if(st.count(curr)) {
+            if(solve(j + 1, j + 1, s)) return dp[i][j] = true; // start new substring
+            if(solve(i, j + 1, s)) return dp[i][j] = true; // extend current
+        }
+        else {
+            if(solve(i, j + 1, s)) return dp[i][j] = true; // extend
         }
 
-        return dp[index] = false;
+        return dp[i][j] = false;
     }
 
     bool wordBreak(string s, vector<string>& wordDict) {
-        n = s.size();
-        for(auto word : wordDict) st.insert(word);
+        int n = s.size();
+        for(auto &s: wordDict) st.insert(s);
+        if(st.count(s)) return true;
 
-        memset(dp, -1, sizeof(dp));
-        return solve(0, s);
+        dp.assign(n + 1, vector<int>(n + 1, -1));
+        if(solve(0, 0, s)) return true;
+        return false;   
     }
 };
