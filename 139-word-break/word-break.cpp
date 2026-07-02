@@ -1,5 +1,8 @@
 class Solution {
 public:
+    // this is a very beautiful approach of extending or starting a new substring.
+    // (must remember this approach)
+
     unordered_set<string> st;
     vector<vector<int>> dp;
 
