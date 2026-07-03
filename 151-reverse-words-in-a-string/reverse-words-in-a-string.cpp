@@ -2,27 +2,24 @@ class Solution {
 public:
     string reverseWords(string s) {
         int n = s.size();
-        vector<string> ans;
+        string ans = "";
+        int i = n - 1;
 
-        for(int i = 0; i < n; i++) {
-            if(s[i] == ' ') continue;
-
-            string word = "";
-            while(i < n && s[i] != ' ') {
-                word += s[i];
-                i++;
+        while(i >= 0) {
+            if(s[i] == ' ') {
+                i--;
+                continue;
             }
 
-            ans.push_back(word);
+            int j = i;
+            while(j >= 0 && s[j] != ' ') j--;
+            ans += s.substr(j + 1, i - j);
+            ans += ' ';
+
+            i = j - 1;
         }
 
-        string reversed = "";
-        for(int i = ans.size() - 1; i >= 0; i--) {
-            reversed += ans[i];
-            reversed += ' ';
-        }
-
-        reversed.pop_back(); // pop the last space
-        return reversed;
+        ans.pop_back(); // remove last whitespace 
+        return ans; 
     }
 };
