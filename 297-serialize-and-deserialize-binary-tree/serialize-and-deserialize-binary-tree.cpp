@@ -1,57 +1,55 @@
 class Codec {
 public:
-    // we can't traverse the nodes array using (2*i + 1) and (2*i + 2) indices coz 
-    // these indices are only used when we are given the level-order / complete-binary-tree array.
-    // but here, we have calcuated the preorder traversal.
-    // To serialize, we use Preorder traversal with NULL marking.
- 
     void preorder(TreeNode* root, string &s) {
         if(root == NULL) {
             s += "#,";
             return;
         }
 
-        s += to_string(root -> val) + ",";
+        s += to_string(root -> val) + ","; 
         preorder(root -> left, s);
         preorder(root -> right, s);
     }
 
-    // Encodes a tree to a single string.
-    string serialize(TreeNode* root) {
-        string s;
-        preorder(root, s);
-        return s;
-    }
-
-    TreeNode* build(int &index, vector<string> &nodes) {
-        if(nodes[index] == "#") {
+    TreeNode* build(int &index, vector<string> &vec) {
+        if(vec[index] == "#") {
             index++; // increment only when the condition met
             return NULL;
         }
 
-        int value = stoi(nodes[index++]);
+        int value = stoi(vec[index++]);
         TreeNode* root = new TreeNode(value);
-
-        root -> left = build(index, nodes);
-        root -> right = build(index, nodes);
+        root -> left = build(index, vec);
+        root -> right = build(index, vec);
 
         return root;
     }
 
-    // Decodes your encoded data to tree.
-    TreeNode* deserialize(string data) {
-        vector<string> nodes; 
-        string temp;
+    string serialize(TreeNode* root) {
+        string s = "";
+        preorder(root, s);
+        return s;
+    }
 
-        for(auto ch: data) { // to extract nodes from the input string
-            if(ch == ',') {
-                nodes.push_back(temp);
-                temp.clear();
+    TreeNode* deserialize(string data) {
+        int n = data.size();
+        vector<string> vec;
+
+        int i = 0;
+        while(i < n) {
+            string temp = "";
+            int j = i;
+            while(j < n && data[j] != ',') {
+                temp += data[j];
+                j++;
             }
-            else temp += ch;
+
+            vec.push_back(temp);
+            i = j + 1;
         }
 
         int index = 0;
-        return build(index, nodes);
+        TreeNode* root = build(index, vec);
+        return root;
     }
 };
