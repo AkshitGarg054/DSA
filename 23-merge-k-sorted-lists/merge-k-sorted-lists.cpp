@@ -1,14 +1,13 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-
-        auto cmp = [&](ListNode *a, ListNode* b) {
-            return a -> val > b -> val; // a niche hoga, b upar hoga.
+        auto cmp = [&](ListNode* a, ListNode* b) {
+            return a -> val > b -> val; // a upar hoga, b niche
         };
 
-        priority_queue<ListNode*, vector<ListNode*>,  decltype(cmp)> pq(cmp);
+        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> pq(cmp);
 
-        for(auto head : lists) {
+        for(auto &head: lists) {
             if(head != NULL) pq.push(head);
         }
 
