@@ -1,5 +1,11 @@
 class Solution {
 public:
+    // Consider s = "cae"
+    // For i = 0, c --> c, ca, cae, ce ...solve(1) only returns the count that how can subsequences are be made starting from index 1
+    // For i = 1, a --> a, ae
+    // For i = 2, e --> e
+    // Total 7 subsequences 
+
     const int MOD = 1e9 + 7;
     int dp[2001];
 
