@@ -3,27 +3,31 @@ public:
     int jump(vector<int>& nums) {
         int n = nums.size();
         if(n == 1) return 0;
-
-        int curr_far = 0 + nums[0]; // we will firstly traverse this window completely and select the farthest from that
-        // and will increment the count only once for each window
-        int farthest = curr_far;
-        int count = 0;
-
-        if(curr_far >= n-1) return 1; // {2, 1}
+        int mini = INT_MAX;
+        int jumps = 0;
 
         int i = 0;
-        while(i <= curr_far && i < n) {
-            farthest = max(farthest, i + nums[i]); // choose the farthest from the current window
-            
-            if(i == curr_far) { // when current window gets over
-                curr_far = farthest; // then set the new window to the new farthest
-                count++; // and we did one jump in one window 
-                if(curr_far >= n-1) return count + 1; // one jump extra for last jump
+        while(i < n) {
+            int limit = i + nums[i];
+            if(limit >= n - 1) return jumps + 1;
+            int maxi = INT_MIN;
+
+            int j = i + 1;
+            int index = -1;
+            while(j <= limit) {
+                int new_limit = j + nums[j];
+                if(new_limit >= maxi) {
+                    maxi = new_limit;
+                    index = j;
+                }
+                j++;
             }
-            
-            i++;
+
+            jumps++;
+            if(maxi >= n - 1) return jumps + 1; // 1 added for last jump
+            i = index;
         }
 
-        return count;
+        return jumps + 1;
     }
 };
