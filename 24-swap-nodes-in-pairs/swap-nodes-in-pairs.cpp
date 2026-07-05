@@ -9,7 +9,7 @@ public:
         ListNode* curr = head;
         ListNode* nextNode = curr -> next;
 
-        while(curr != NULL && curr -> next != NULL) {
+        while(curr != NULL && curr -> next != NULL) { // because we need two nodes to swap
             curr -> next = nextNode -> next;
             nextNode -> next = curr;
             prev -> next = nextNode;
