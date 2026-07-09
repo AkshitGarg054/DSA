@@ -37,6 +37,7 @@ public:
                 continue;
             }
 
+            // we can't check parent[u] == parent[v]
             if(find(u) == find(v)) ans[i] = true; // if u and v are in same component
             else ans[i] = false;
         }
