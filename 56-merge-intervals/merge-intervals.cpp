@@ -2,25 +2,25 @@ class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         int n = intervals.size();
-        vector<vector<int>> ans;
         sort(intervals.begin(), intervals.end());
 
-        int curr_l = intervals[0][0];
-        int curr_r = intervals[0][1];
+        vector<vector<int>> ans;
+        vector<int> prev = intervals[0];
 
         for(int i = 1; i < n; i++) {
-            int check_l = intervals[i][0];
-            int check_r = intervals[i][1];
+            vector<int> curr = intervals[i];
 
-            if(check_l > curr_r) { // don't overlap anymore, create a new interval
-                ans.push_back({curr_l, curr_r});
-                curr_l = check_l;
-                curr_r = check_r;
+            if(prev[1] >= curr[0] && prev[1] <= curr[1]) {
+                prev[0] = min(prev[0], curr[0]);
+                prev[1] = max(prev[1], curr[1]);
             }
-            else curr_r = max(curr_r, check_r); // overlap
+            else if(prev[1] < curr[0]) {
+                ans.push_back(prev);
+                prev = curr;
+            }
         }
 
-        ans.push_back({curr_l, curr_r});
+        ans.push_back(prev);
         return ans;
     }
 };
