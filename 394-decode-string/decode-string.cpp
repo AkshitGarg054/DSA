@@ -1,5 +1,7 @@
 class Solution {
 public:
+    // to convert a char to a string, we do: string(1, ch) ...not to_string(ch)
+
     string decodeString(string s) {
         int n = s.size();
         stack<string> st; // as the digits range from 1 to 300
