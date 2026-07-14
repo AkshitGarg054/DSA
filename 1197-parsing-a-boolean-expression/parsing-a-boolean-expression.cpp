@@ -1,44 +1,49 @@
 class Solution {
 public:
-    bool parseBoolExpr(string expression) {
-        int n = expression.size();
-        stack<char> st;
+    bool solve(int &index, string &s) {
+        char ch = s[index];
 
-        for(int i = 0; i < n; i++) {
-            char ch = expression[i];
-
-            if(ch == '(' || ch == ',') continue;
-            else if(ch != ')') st.push(ch);
-            else if(ch == ')') {
-                int t = 0;
-                int f = 0;
-
-                while(st.top() == 't' || st.top() == 'f') {
-                    char c = st.top();
-                    st.pop();
-                    if(c == 't') t++;
-                    else f++;
-                }
-
-                char op = st.top();
-                st.pop();
-
-                if(op == '|') {
-                    if(t > 0) st.push('t');
-                    else st.push('f');
-                }
-                else if(op == '&') {
-                    if(f > 0) st.push('f');
-                    else st.push('t');
-                }
-                else if(op == '!') {
-                    if(t == 1) st.push('f');
-                    else if(f == 1) st.push('t');
-                }
-            }
+        char op;
+        if(ch == '|' || ch == '!' || ch == '&') {
+            op = ch;
+            index++; // Consume the operator 
+            index++; // Consume '('
         }
 
-        if(st.top() == 't') return true;
-        return false;
+        bool ans;
+        if (op == '!') ans = false; // Will be overwritten anyway
+        else if (op == '&') ans = true;  // AND needs to start as true
+        else if (op == '|') ans = false; // OR needs to start as false
+
+        while (s[index] != ')') {
+            
+            bool next;
+            if(s[index] == 'f') {
+                next = false;
+                index++;
+            }
+            else if(s[index] == 't') {
+                next = true;
+                index++;
+            }
+            else next = solve(index, s);
+
+            if (op == '!') ans = !next;
+            else if (op == '&') ans = ans && next;
+            else if (op == '|') ans = ans || next;
+
+            if (s[index] == ',') index++;
+        }
+
+        index++; // Consume ')'
+        return ans;
+    }
+
+    bool parseBoolExpr(string expression) {
+        if(expression == "f") return false;
+        if(expression == "t") return true;
+        
+        int index = 0;
+        return solve(index, expression);
     }
 };
