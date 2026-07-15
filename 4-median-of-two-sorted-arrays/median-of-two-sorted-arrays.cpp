@@ -3,29 +3,42 @@ public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int n = nums1.size();
         int m = nums2.size();
+        int total = n + m;
+        int mid = total / 2;
+
+        // if total is even, then we want (mid - 1) and (mid) element.
+        // if total is odd, then we want (mid) element.
+        int count = 0;
+        int ele1, ele2;
 
         int i = 0, j = 0;
-        vector<int> merged;
-
         while(i < n && j < m) {
-            if(nums1[i] < nums2[j]) merged.push_back(nums1[i++]);
-            else if(nums2[j] < nums1[i]) merged.push_back(nums2[j++]);
-            else {
-                merged.push_back(nums1[i]);
-                merged.push_back(nums2[j]);
-                i++, j++;
-            }
+            int curr;
+            if(nums1[i] <= nums2[j]) curr = nums1[i++];
+            else if(nums1[i] > nums2[j]) curr = nums2[j++];
+
+            if(count == mid - 1) ele1 = curr;
+            if(count == mid) ele2 = curr;
+            count++;
         }
 
-        while(i < n) merged.push_back(nums1[i++]);
-        while(j < m) merged.push_back(nums2[j++]);
+         while (i < n) {
+            int curr = nums1[i++];
+            if (count == mid - 1) ele1 = curr;
+            if (count == mid) ele2 = curr;
+            count++;
+        }
 
-        int sz = merged.size();
-        int mid = sz / 2;
+        while (j < m) {
+            int curr = nums2[j++];
+            if (count == mid - 1) ele1 = curr;
+            if (count == mid) ele2 = curr;
+            count++;
+        }
+
         double median;
-
-        if(sz % 2 == 0) median = (merged[mid - 1] + merged[mid]) / 2.0;
-        else median = merged[mid];
+        if(total % 2 == 0) median = (ele1 + ele2) / 2.0;
+        else median = ele2;
 
         return median;
     }
