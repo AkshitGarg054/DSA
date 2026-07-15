@@ -3,43 +3,30 @@ public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int n = nums1.size();
         int m = nums2.size();
+        if (n > m) return findMedianSortedArrays(nums2, nums1); // we need to always apply BS on the smaller array
+        
+        int low = 0, high = n; // apply binary search on nums1
         int total = n + m;
         int mid = total / 2;
 
-        // if total is even, then we want (mid - 1) and (mid) element.
-        // if total is odd, then we want (mid) element.
-        int count = 0;
-        int ele1, ele2;
+        while(low <= high) {
+            int i = low + (high - low) / 2;
+            int j = mid - i; // total elements in left half should be equal to 'mid'
 
-        int i = 0, j = 0;
-        while(i < n && j < m) {
-            int curr;
-            if(nums1[i] <= nums2[j]) curr = nums1[i++];
-            else if(nums1[i] > nums2[j]) curr = nums2[j++];
+            int left1 = (i == 0) ? INT_MIN : nums1[i - 1];
+            int right1 = (i == n) ? INT_MAX : nums1[i];
+            
+            int left2 = (j == 0) ? INT_MIN : nums2[j - 1];
+            int right2 = (j == m) ? INT_MAX : nums2[j];
 
-            if(count == mid - 1) ele1 = curr;
-            if(count == mid) ele2 = curr;
-            count++;
+            if(left1 <= right2 && left2 <= right1) {
+                if(total % 2 != 0) return min(right1, right2);
+                else return (max(left1, left2) + min(right1, right2)) / 2.0;
+            }
+            else if(left1 > right2) high = i - 1;
+            else low = i + 1;
         }
 
-         while (i < n) {
-            int curr = nums1[i++];
-            if (count == mid - 1) ele1 = curr;
-            if (count == mid) ele2 = curr;
-            count++;
-        }
-
-        while (j < m) {
-            int curr = nums2[j++];
-            if (count == mid - 1) ele1 = curr;
-            if (count == mid) ele2 = curr;
-            count++;
-        }
-
-        double median;
-        if(total % 2 == 0) median = (ele1 + ele2) / 2.0;
-        else median = ele2;
-
-        return median;
+        return 0.0;
     }
 };
