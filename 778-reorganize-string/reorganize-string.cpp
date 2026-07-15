@@ -1,34 +1,37 @@
 class Solution {
 public:
-    // here also, we don't want any any two adjacent characters to be same.
-    // so, to create such a string where this arrangement is possible --
-    // start by placing the most frequent characters first
-    // use max heap (as we need to dynamically update the frequencies of chars)
-    // Because if you just used 'a', you should not use it again immediately,
-    // so keep it outside the heap for one turn. This automatically enforces, no adjacent duplicates
-
     string reorganizeString(string s) {
-        unordered_map<char, int> mp;
-        for(auto ch : s) mp[ch]++;
+        int n = s.size();
 
-        priority_queue<pair<int, char>> pq; // use max heap, to always get the char with max freq
-        for(auto [ch, count] : mp) pq.push({count, ch});
+        unordered_map<char, int> mp;
+        for(auto &ch: s) mp[ch]++;
+
+        priority_queue<pair<int, char>> pq;
+        for(auto &[ch, freq]: mp) pq.push({freq, ch});
 
         string ans = "";
-        pair<int, char> prev = {0, '#'};
 
-        while(!pq.empty()) {
-            auto [freq, ch] = pq.top();
+        while(pq.size() >= 2) {
+            auto [f1, ch1] = pq.top();
+            pq.pop();
+            auto [f2, ch2] = pq.top();
             pq.pop();
 
-            ans += ch;
-            freq--;
-            if(prev.first > 0) pq.push(prev); // now, prev char can be reused
+            ans += ch1;
+            f1--;
+            ans += ch2;
+            f2--;
 
-            prev = {freq, ch};
+            if(f1 > 0) pq.push({f1, ch1});
+            if(f2 > 0) pq.push({f2, ch2});
         }
 
-        if(ans.size() != s.size()) return ""; // "aaab"
+        if(!pq.empty()) {
+            auto [f, ch] = pq.top();
+            if(f > 1) return ""; // not possible
+            ans += ch;
+        }
+
         return ans;
     }
 };
