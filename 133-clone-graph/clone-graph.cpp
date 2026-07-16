@@ -23,26 +23,17 @@ class Solution {
 public:
     unordered_map<Node*, Node*> mp;
 
-    void solve(Node* node, Node* cloned_node) {
-
-        for(auto &v: node -> neighbors) {
-            if(!mp.count(v)) {
-                Node* cloned = new Node(v -> val);
-                mp[v] = cloned;
-                cloned_node -> neighbors.push_back(cloned);
-                solve(v, cloned);
-            }
-            else cloned_node -> neighbors.push_back(mp[v]);
-        }
-    }
-
     Node* cloneGraph(Node* node) {
         if(node == NULL) return NULL;
+        if(mp.count(node)) return mp[node];
 
-        Node* cloned_node = new Node(node -> val);
-        mp[node] = cloned_node;
+        Node* cloned = new Node(node -> val);
+        mp[node] = cloned;
 
-        solve(node, cloned_node);
-        return cloned_node;
+        for(auto &v: node -> neighbors) {
+            cloned -> neighbors.push_back(cloneGraph(v));
+        }
+
+        return cloned;
     }
 };
