@@ -1,16 +1,38 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
 class Solution {
 public:
-    unordered_map<Node*, Node*> mp; // In map, we will store the cloned node for every node
+    unordered_map<Node*, Node*> mp;
 
     void solve(Node* node, Node* cloned_node) {
-        for(auto n: node -> neighbors) {
-            if(!mp.count(n)) {
-                Node* cloned = new Node(n -> val);
-                mp[n] = cloned;
+
+        for(auto &v: node -> neighbors) {
+            if(!mp.count(v)) {
+                Node* cloned = new Node(v -> val);
+                mp[v] = cloned;
                 cloned_node -> neighbors.push_back(cloned);
-                solve(n, cloned);
+                solve(v, cloned);
             }
-            else cloned_node -> neighbors.push_back(mp[n]);
+            else cloned_node -> neighbors.push_back(mp[v]);
         }
     }
 
@@ -20,9 +42,6 @@ public:
         Node* cloned_node = new Node(node -> val);
         mp[node] = cloned_node;
 
-        // Now, clone its neighbors and recursively their neighbors
-        // But if a node reappears, then we need to access that cloned node using map.
-        // So, we stored each cloned node in a map.
         solve(node, cloned_node);
         return cloned_node;
     }
