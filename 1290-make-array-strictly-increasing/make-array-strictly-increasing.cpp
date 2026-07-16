@@ -1,5 +1,11 @@
 class Solution {
 public:
+    // arr1 = [1, 5, 3, 6] 
+    // arr2 = [1, 8, 9]
+    // we can replace 5 or not replace 5
+    // Replace 5: [1, 8, 9] --> we got no solution.
+    // not replace 5: [1, 5, 8, 9] --> got solution
+
     unordered_map<string, int> dp;
 
     int solve(int index, int prev, vector<int> &arr1, vector<int> &arr2) {
