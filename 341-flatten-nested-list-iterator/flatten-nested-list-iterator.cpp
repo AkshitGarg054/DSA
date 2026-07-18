@@ -18,33 +18,28 @@
 
 class NestedIterator {
 public:
-    queue<int> flattenedList;
+    // as we want to know whether there is any next element or not, so queue can tell this
+    queue<int> flatten; 
 
-    void flatten(vector<NestedInteger> &nestedList) {
+    void solve(vector<NestedInteger> &nestedList) {
         for(auto &it: nestedList) {
-            if(it.isInteger()) flattenedList.push(it.getInteger());
-            else flatten(it.getList()); 
+            if(it.isInteger()) flatten.push(it.getInteger());
+            else solve(it.getList());
         }
     }
 
     NestedIterator(vector<NestedInteger> &nestedList) {
-        flatten(nestedList);
+        solve(nestedList);
     }
     
     int next() {
-        int ans = flattenedList.front();
-        flattenedList.pop();
-        return ans;
+        int ele = flatten.front();
+        flatten.pop();
+        return ele;
     }
     
     bool hasNext() {
-        if(flattenedList.empty()) return false;
+        if(flatten.empty()) return false;
         return true;
     }
 };
-
-/**
- * Your NestedIterator object will be instantiated and called as such:
- * NestedIterator i(nestedList);
- * while (i.hasNext()) cout << i.next();
- */
