@@ -1,76 +1,91 @@
+// To access the Least recently used value in O(1) time, I am using doubly linkedlist where the latest used/accessed value is put at start of the linkedlist. This way, the least recently used is always at the end of list.
+
+class Node {
+public:
+    int k, v;
+    Node* prev;
+    Node* next;
+
+    Node(int k, int v) {
+        this -> k = k;
+        this -> v = v;
+        prev = NULL;
+        next = NULL;
+    }
+};
+
 class LRUCache {
 public:
-    class Node {
-    public:
-        int key, val;
-        Node* prev;
-        Node* next;
-
-        Node(int k, int v) {
-            key = k;
-            val = v;
-            prev = next = NULL;
-        }
-    };
-
-    Node* head = new Node(-1, -1);
-    Node* tail = new Node(-1, -1);  
-
     unordered_map<int, Node*> mp;
-    int capacity;
+    int sz;
 
-    void addNode(Node* newNode) {
-        Node* oldNode = head -> next;
-
-        head -> next = newNode;
-        oldNode -> prev = newNode;
-
-        newNode -> next = oldNode;
-        newNode -> prev = head;
-    }
-
-    void delNode(Node* oldNode) {
-        Node* oldPrev = oldNode -> prev;
-        Node* oldNext = oldNode -> next;
-
-        oldPrev -> next = oldNext;
-        oldNext -> prev = oldPrev;
-    }
+    Node* head = new Node(-1, -1); // to access the head while adding new nodes at start.
+    Node* tail = new Node(-1, -1); // to access the tail while adding new nodes at end.
+    
+    // The actual list will be between the head and tail pointers, that is:
+    // HEAD <-- ......actual list...... -> TAIL.
 
     LRUCache(int capacity) {
-        this -> capacity = capacity;
+        sz = capacity;
         head -> next = tail;
         tail -> prev = head;
+    }
+
+    // as the actual list is in between, so we need to delete the node from in between.
+    void deleteNode(Node* node) {
+        Node* p = node -> prev;
+        Node* n = node -> next;
+        p -> next = n;
+        n -> prev = p;
+        // delete(node); // we are not deleting the node, we are just removing it from the linkedlist.
+    }
+
+    void insertAtHead(Node* node) {
+        Node* n = head -> next;
+        head -> next = node;
+        node -> prev = head;
+        node -> next = n;
+        n -> prev = node;
     }
     
     int get(int key) {
         if(!mp.count(key)) return -1;
 
-        Node* getNode = mp[key];
-        int ans = getNode -> val;
-
-        mp.erase(key);
-        delNode(getNode);
-        addNode(getNode);
-
-        mp[key] = head -> next;
+        int ans = mp[key] -> v;
+        deleteNode(mp[key]); // delete from back and insert at front.
+        insertAtHead(mp[key]);
         return ans;
     }
     
     void put(int key, int value) {
+        // if key already exists, then just update it and put in front.
         if(mp.count(key)) {
-            Node* oldNode = mp[key];
-            delNode(oldNode);
-            mp.erase(key);
+            mp[key] -> v = value;
+            deleteNode(mp[key]);
+            insertAtHead(mp[key]);
+            return;
         }
 
-        if(mp.size() == capacity) {
-            mp.erase(tail -> prev -> key);
-            delNode(tail -> prev);
+        // if node with the given key does not exists.
+        if(mp.size() >= sz) {
+            // delete the lru node, change its (k, v) to the required (k, v) and then insert it at front.
+            Node* target = tail -> prev;
+            deleteNode(target);
+            mp.erase(target -> k);  // delete the old key from the map.
+
+            target -> k = key; // update the node with new key value pair
+            target -> v = value;
+
+            insertAtHead(target); // insert at head
+            mp[key] = target;
+            return;
         }
 
-        Node* newNode = new Node({key, value});
-        addNode(newNode);
+        // if the node with the given key does not exist, but we have enough size to insert it.
+        // then just create a new node and insert at head.
+        Node* newNode = new Node(key, value);
+        insertAtHead(newNode);
         mp[key] = newNode;
+        return; 
     }
 };
