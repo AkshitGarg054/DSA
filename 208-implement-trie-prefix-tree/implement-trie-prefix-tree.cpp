@@ -1,20 +1,6 @@
 struct Node {
     Node* links[26];
     bool flag = false;
-
-    bool containsKey(char ch) {
-        if(links[ch - 'a'] != NULL) return true;
-        return false;
-    }
-
-    void put(char ch, Node* node) {
-        links[ch - 'a'] = node; 
-        return;
-    }
-
-    Node* get(char ch) { // to go to the referencing node attached to ch.
-        return links[ch - 'a'];
-    }
 };
 
 class Trie {
@@ -27,9 +13,11 @@ public:
     
     void insert(string word) {
         Node* node = root;
+
         for(int i = 0; i < word.size(); i++) {
-            if(!node -> containsKey(word[i])) node -> put(word[i], new Node());
-            node = node -> get(word[i]); // go to the next node to which word[i] points to.
+            char ch = word[i];
+            if(node -> links[ch - 'a'] == NULL) node -> links[ch - 'a'] = new Node();
+            node = node -> links[ch - 'a']; // go to the next node to which word[i] points to.
         }
 
         node -> flag = true; // mark it as true
@@ -37,9 +25,11 @@ public:
     
     bool search(string word) {
         Node* node = root;
+
         for(int i = 0; i < word.size(); i++) {
-            if(!node -> containsKey(word[i])) return false;
-            node = node -> get(word[i]);
+            char ch = word[i];
+            if(node -> links[ch - 'a'] == NULL) return false;
+            node = node -> links[ch - 'a'];
         }
 
         if(node -> flag == true) return true;
@@ -48,9 +38,11 @@ public:
     
     bool startsWith(string prefix) {
         Node* node = root;
+
         for(int i = 0; i < prefix.size(); i++) {
-            if(!node -> containsKey(prefix[i])) return false;
-            node = node -> get(prefix[i]);
+            char ch = prefix[i];
+            if(node -> links[ch - 'a'] == NULL) return false;
+            node = node -> links[ch - 'a'];
         } 
 
         return true; // if prefix is complete then just return true
