@@ -1,26 +1,29 @@
 class Solution {
 public:
-    int dp[201][20001];
+    vector<vector<int>> dp;
 
-    bool solve(int index, vector<int> &nums, int target) {
-        if(target == 0) return true;
-        if(index >= nums.size()) return false;
-        if(dp[index][target] != -1) return dp[index][target];
+    bool solve(int index, int sum, int target, vector<int> &nums) {
+        if(index == nums.size()) {
+            if(sum == target) return true;
+            return false;
+        } 
+        if(sum > target) return false;
+        if(dp[index][sum] != -1) return dp[index][sum];
 
-        if(target >= nums[index] && solve(index + 1, nums, target - nums[index]) == true) return dp[index][target] = true;
-        if(solve(index + 1, nums, target) == true) return dp[index][target] = true;
-        
-        return dp[index][target] = false;
+        if(solve(index + 1, sum + nums[index], target, nums)) return dp[index][sum] = true;
+        if(solve(index + 1, sum, target, nums)) return dp[index][sum] = true;
+
+        return dp[index][sum] = false;
     }
 
     bool canPartition(vector<int>& nums) {
         int n = nums.size();
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if(sum % 2 != 0) return false; // odd sum
 
-        int sum = 0;
-        for(auto x : nums) sum += x;
-        if(sum % 2 != 0) return false;
+        int target = sum / 2;
 
-        memset(dp, -1, sizeof(dp));
-        return solve(0, nums, sum / 2);
+        dp.assign(n, vector<int>(sum + 1, -1));
+        return solve(0, 0, target, nums); // index, sum
     }
 };
