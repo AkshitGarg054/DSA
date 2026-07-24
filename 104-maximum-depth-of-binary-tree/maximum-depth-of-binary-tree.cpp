@@ -1,17 +1,30 @@
 class Solution {
 public:
-    // best template
-    int solve(TreeNode* root) {
-        if(root == NULL) return 0;
-
-        int left = 1 + solve(root -> left);
-        int right = 1 + solve(root -> right);
-
-        return max(left, right);
-    }
-
     int maxDepth(TreeNode* root) {
-        if(root == NULL) return 0;
-        return solve(root);
+        if (root == nullptr){
+            return 0;
+        }
+        // depth wise iteration 
+        queue<TreeNode*> st;
+        int count = 0;
+        st.push(root);
+        int size = 0;
+        while(!st.empty()){
+            size = st.size();
+            while(size--){
+                auto it = st.front();
+                st.pop();
+                if (it->left != nullptr){
+                    st.push(it->left);
+                }
+                if (it->right != nullptr){
+                    st.push(it->right);
+                }
+            }
+            count++;
+        }
+
+
+        return count;
     }
 };
