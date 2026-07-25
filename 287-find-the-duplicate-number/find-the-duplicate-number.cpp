@@ -1,30 +1,25 @@
 class Solution {
 public:
-    // approach 3: tortoise and hare algo
-
     int findDuplicate(vector<int>& nums) {
         int n = nums.size();
-        int slow = nums[0];
-        int fast = nums[0];
+        int low = 0, high = n - 1;
+        int duplicate = -1;
 
-        slow = nums[slow];
-        fast = nums[nums[fast]];
+        while(low <= high) {
+            int mid = low + (high - low) / 2;
 
-        // detect cycle
-        while(slow != fast) {
-            slow = nums[slow];
-            fast = nums[nums[fast]];
+            int count = 0;
+            for(auto &num: nums) {
+                if(num <= mid) count++;
+            }
+
+            if(count > mid) {
+                duplicate = mid;
+                high = mid - 1;
+            }
+            else low = mid + 1;
         }
 
-        // move slow pointer back to start
-        slow = nums[0];
-
-        // keep moving both by 1
-        while(slow != fast) {
-            slow = nums[slow];
-            fast = nums[fast];
-        }
-
-        return slow; // or fast
+        return duplicate;
     }
 };
