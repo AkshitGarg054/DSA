@@ -3,19 +3,21 @@ public:
     int n;
     vector<vector<int>> dp;
 
-    int solve(int row, int col, vector<vector<int>> &tri) {
-        if(row == n) return 0;
-        if(dp[row][col] != -1e9) return dp[row][col];
+    int solve(int i, int j, vector<vector<int>> &grid) {
+        if(i >= n || j >= i + 1) return 1e9; // ith row has (i + 1) columns
+        if(i == n - 1 && j < n) return grid[i][j];
+        if(dp[i][j] != -1e9) return dp[i][j];
 
-        int down = tri[row][col] + solve(row + 1, col, tri);
-        int right = tri[row][col] + solve(row + 1, col + 1, tri); // we can always go right (coz next row always increase one ele)
+        int down = grid[i][j] + solve(i + 1, j, grid);
+        int next = grid[i][j] + solve(i + 1, j + 1, grid);
 
-        return dp[row][col] = min(down, right);
+        return dp[i][j] = min(down, next); 
     }
 
     int minimumTotal(vector<vector<int>>& triangle) {
         n = triangle.size();
-        dp.resize(n, vector<int>(n, -1e9));
-        return solve(0, 0, triangle); // row, col
+
+        dp.assign(n, vector<int>(n, -1e9));
+        return solve(0, 0, triangle);
     }
 };
