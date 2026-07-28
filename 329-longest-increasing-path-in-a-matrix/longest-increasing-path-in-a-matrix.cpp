@@ -6,14 +6,18 @@ public:
 
     // visited is not needed because we always move towards a strictly larger value (so there is no point of taking the back step again).
     int solve(int i, int j, vector<vector<int>> &grid) {
-        if(i < 0 || i >= n || j < 0 || j >= m) return -1e9;
         if(dp[i][j] != -1) return dp[i][j];
-
         int len = 1;
-        if(i + 1 < n && grid[i + 1][j] > grid[i][j]) len = max(len, 1 + solve(i + 1, j, grid)); // down
-        if(i > 0 && grid[i - 1][j] > grid[i][j]) len = max(len, 1 + solve(i - 1, j, grid)); // up
-        if(j + 1 < m && grid[i][j + 1] > grid[i][j]) len = max(len, 1 + solve(i, j + 1, grid)); // right
-        if(j > 0 && grid[i][j - 1] > grid[i][j]) len = max(len, 1 + solve(i, j - 1, grid)); // left
+
+        for(auto &d: dirs) {
+            int ni = i + d[0];
+            int nj = j + d[1];
+
+            if(ni < 0 || ni >= n || nj < 0 || nj >= m) continue;
+            if(grid[i][j] >= grid[ni][nj]) continue;
+
+            len = max(len, 1 + solve(ni, nj, grid));
+        }
 
         return dp[i][j] = len;
     }
