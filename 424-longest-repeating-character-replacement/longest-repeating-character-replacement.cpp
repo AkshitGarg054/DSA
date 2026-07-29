@@ -1,12 +1,11 @@
 class Solution {
 public:
-    // As longest repeating char ki baat ho rhi haii, so we can use a map
     int characterReplacement(string s, int k) {
         int n = s.size();
 
-        unordered_map<char, int> mp;
         int l = 0, r = 0;
         int max_freq = INT_MIN;
+        unordered_map<char, int> mp;
         int ans = INT_MIN;
 
         while(r < n) {
@@ -15,6 +14,7 @@ public:
 
             while((r - l + 1) - max_freq > k) {
                 mp[s[l]]--;
+                if(mp[s[l]] == 0) mp.erase(s[l]);
                 l++;
             }
 
