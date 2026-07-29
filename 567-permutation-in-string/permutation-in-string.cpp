@@ -5,21 +5,21 @@ public:
         int m = s2.size();
         if(m < n) return false;
 
-        unordered_map<char, int> mp1;
-        for(auto ch: s1) mp1[ch]++;
-        
+        unordered_map<char, int> mp1; 
+        for(auto &ch: s1) mp1[ch]++;
+
         unordered_map<char, int> mp2;
         for(int i = 0; i < n; i++) mp2[s2[i]]++;
-        if(mp1 == mp2) return true;
+        if(mp1 == mp2) return true; // checking the first window
 
-        int l = 0, r = n; // fixed size sliding window of the size of s1
-
-        while(r < s2.size()) {
+        int l = 0, r = n; // fixed size sliding window
+        
+        while(r < m) {
             mp2[s2[r]]++;
 
-            if(r - l + 1 > n) {
+            while(r - l + 1 > n) {
                 mp2[s2[l]]--;
-                if(mp2[s2[l]] == 0) mp2.erase(s2[l]); // important to erase, to check mp1 == mp2 later
+                if(mp2[s2[l]] == 0) mp2.erase(s2[l]);
                 l++;
             }
 
