@@ -7,11 +7,10 @@ public:
         int maxi = INT_MIN;
 
         for(int i = 0; i < n; i++) {
-            maxi = max(maxi, prices[i] - mini);
             mini = min(mini, prices[i]);
+            maxi = max(maxi, prices[i] - mini);
         }
 
-        if(maxi < 0) return 0;
         return maxi;
     }
 };
