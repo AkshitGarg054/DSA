@@ -1,9 +1,7 @@
 class Solution {
 public:
-    // duplicate characters ki baat ho rhi haii, so use set
     int lengthOfLongestSubstring(string s) {
         int n = s.size();
-        if(n == 0) return 0;
 
         unordered_set<char> st;
         int l = 0, r = 0;
@@ -20,6 +18,7 @@ public:
             r++;
         }
 
+        if(maxi == INT_MIN) return 0;
         return maxi;
     }
 };
