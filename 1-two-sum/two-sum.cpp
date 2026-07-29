@@ -1,24 +1,22 @@
 class Solution {
 public:
+    // This fails for nums = [3, 3], target == 6 because in map, it only stores 3 -> 1
     vector<int> twoSum(vector<int>& nums, int target) {
         int n = nums.size();
 
-        vector<pair<int, int>> arr(n);
-        for(int i = 0; i < n; i++) arr[i] = {nums[i], i};
+        unordered_map<int, int> mp; // value -> index
+        for(int i = 0; i < nums.size(); i++) mp[nums[i]] = i; 
 
-        sort(arr.begin(), arr.end());
+        for(int i = 0; i < n; i++) {
+            int val = nums[i];
+            int index = i;
 
-        int i = 0, j = n - 1;
-
-        while(i < j) {
-            int ele1 = arr[i].first;
-            int ele2 = arr[j].first;
-
-            if(ele1 + ele2 == target) return {arr[i].second, arr[j].second};
-            else if(ele1 + ele2 > target) j--;
-            else i++;
+            if(mp.count(target - val) && mp[target - val] != index) { // val + x = target
+                int index1 = mp[target - val];
+                return {index1, index};
+            }
         }
 
-        return {-1, -1};
+        return {};
     }
 };
