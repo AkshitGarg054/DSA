@@ -5,16 +5,16 @@ public:
         int n = nums.size();
 
         unordered_map<int, int> mp; // value -> index
-        for(int i = 0; i < nums.size(); i++) mp[nums[i]] = i; 
 
-        for(int i = 0; i < n; i++) {
-            int val = nums[i];
-            int index = i;
+        for(int i = 0; i < nums.size(); i++) {
+            int value = nums[i];
 
-            if(mp.count(target - val) && mp[target - val] != index) { // val + x = target
-                int index1 = mp[target - val];
-                return {index1, index};
+            if(mp.count(target - value)) {
+                int index1 = mp[target - value];
+                return {index1, i}; 
             }
+
+            mp[value] = i; 
         }
 
         return {};
