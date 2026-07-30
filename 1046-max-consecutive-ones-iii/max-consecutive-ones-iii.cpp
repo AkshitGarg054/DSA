@@ -4,16 +4,16 @@ public:
         int n = nums.size();
 
         int l = 0, r = 0;
-        int count_ones = 0;
-        int maxi = INT_MIN;
+        int zeros = 0;
+        int maxi = 0;
 
         while(r < n) {
-            if(nums[r] == 1) count_ones++;
+            if(nums[r] == 0) zeros++;
 
-            while((r - l + 1) - count_ones > k) {
-                if(nums[l] == 1) count_ones--;
+            if(zeros > k) {
+                if(nums[l] == 0) zeros--;
                 l++;
-            }
+            } 
 
             maxi = max(maxi, r - l + 1);
             r++;
