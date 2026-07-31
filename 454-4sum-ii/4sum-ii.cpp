@@ -1,22 +1,23 @@
 class Solution {
 public:
+    // whenever koi sum find krna ho arrays me, then always think of looking previously stored values in map
     int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
         int n = nums1.size();
-        int ans = 0;
-
         unordered_map<int, int> mp;
-        
-        for(int a: nums1) {
-            for(int b: nums2) mp[a + b]++;
-        } 
 
-        for(int c: nums3) {
-            for(int d: nums4) {
+        for(auto &a: nums1) {
+            for(auto &b: nums2) mp[a + b]++;
+        }
+
+        int count = 0;
+
+        for(auto &c: nums3) {
+            for(auto &d: nums4) {
                 int target = -(c + d);
-                if(mp.count(target)) ans += mp[target];
+                if(mp.count(target)) count += mp[target];
             }
         }
 
-        return ans;
+        return count;
     }
 };
