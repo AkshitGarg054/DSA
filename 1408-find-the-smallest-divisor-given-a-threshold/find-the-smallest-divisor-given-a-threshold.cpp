@@ -1,19 +1,16 @@
 class Solution {
 public:
-    bool check(int mid, vector<int> &nums, int k) {
-        int sum = 0;
-
-        for(int i = 0; i < nums.size(); i++) {
-            sum += (nums[i] + mid - 1) / mid;
-        }
-
-        return sum <= k;
+    bool check(int mid, vector<int> &nums, int limit) {
+        int val = 0;
+        for(int i = 0; i < nums.size(); i++) val += (nums[i] + mid - 1) / mid;
+        return val <= limit;
     }
 
     int smallestDivisor(vector<int>& nums, int threshold) {
         int n = nums.size();
 
-        int low = 1, high = *max_element(nums.begin(), nums.end());
+        int low = 1;
+        int high = *max_element(nums.begin(), nums.end());
         int ans = high;
 
         while(low <= high) {
