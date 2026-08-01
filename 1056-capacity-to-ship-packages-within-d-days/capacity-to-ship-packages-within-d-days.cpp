@@ -1,32 +1,35 @@
 class Solution {
 public:
-    bool check(vector<int> &weights, int capacity, int days) {
-        int required = 0; // required days
-        int sum = 0;
+    bool check(int mid, vector<int> &weights, int days) {
+        int required = 0;
+        int curr = 0;
+        int i = 0;
 
-        for(int i = 0; i < weights.size(); i++) {
-            if(sum + weights[i] <= capacity) sum += weights[i];
+        while(i < weights.size()) {
+            if(weights[i] > mid) return false;
+            if(curr + weights[i] <= mid) curr += weights[i];
             else {
                 required++;
-                sum = weights[i];
+                curr = weights[i];
             }
+            i++;
         }
 
-        required++; // for last shipping
+        if(curr > 0) required++;
         return required <= days;
     }
 
     int shipWithinDays(vector<int>& weights, int days) {
         int n = weights.size();
 
-        int low = *max_element(weights.begin(), weights.end()); 
+        int low = *max_element(weights.begin(), weights.end());
         int high = accumulate(weights.begin(), weights.end(), 0);
         int ans = high;
 
         while(low <= high) {
             int mid = low + (high - low) / 2;
 
-            if(check(weights, mid, days)) {
+            if(check(mid, weights, days)) {
                 ans = mid;
                 high = mid - 1;
             }
