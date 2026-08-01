@@ -1,27 +1,32 @@
 class Solution {
 public:
+    // we need to find the max length of subarray that we can choose with the limit of k operations.
+    // we will find the actual sum and the expected sum for each window.
+    // each element can be incremented till the max element in a window.
+    // we can sort the array to handle the maximum thing.
+
     int maxFrequency(vector<int>& nums, int k) {
         int n = nums.size();
         sort(nums.begin(), nums.end());
 
         int l = 0, r = 0;
-        int max_len = 0; 
-        long long curr_sum = 0;
+        int len = 0;
+        long long actual = 0;
 
         while(r < n) {
-            curr_sum += nums[r];
-            long long target_sum = 1LL * nums[r] * (r - l + 1);
+            actual += nums[r];
+            long long expected = 1LL * nums[r] * (r - l + 1);
 
-            while(target_sum - curr_sum > k) {
-                curr_sum -= nums[l];
+            while(expected - actual > k) {
+                actual -= nums[l];
+                expected -= nums[r];
                 l++;
-                target_sum -= nums[r]; // updating target sum
             }
 
-            max_len = max(max_len, r - l + 1);
+            len = max(len, r - l + 1);
             r++;
         }
 
-        return max_len;
+        return len;
     }
 };
