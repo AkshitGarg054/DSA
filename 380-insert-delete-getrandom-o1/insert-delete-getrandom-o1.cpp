@@ -1,7 +1,7 @@
 class RandomizedSet {
 public:
+    unordered_map<int, int> mp; // value -> index
     vector<int> arr;
-    unordered_map<int, int> mp; // value -> index 
 
     RandomizedSet() {
         
@@ -9,8 +9,8 @@ public:
     
     bool insert(int val) {
         if(!mp.count(val)) {
+            mp[val] = arr.size();
             arr.push_back(val);
-            mp[val] = arr.size() - 1;
             return true;
         }
         return false;
@@ -19,16 +19,14 @@ public:
     bool remove(int val) {
         if(mp.count(val)) {
             int index = mp[val];
-            int last_val = arr.back();
+            int prev_index = arr.size() - 1;
+            swap(arr[index], arr[prev_index]);
 
-            swap(arr[index], arr.back());
+            mp[arr[index]] = index; // update the index of last element
+            mp.erase(val);
             arr.pop_back();
-
-            mp[last_val] = index;
-            mp.erase(val); // this should be at the last, in order (to handle the case when val removed is the last val itself)
             return true;
         }
-
         return false;
     }
     
