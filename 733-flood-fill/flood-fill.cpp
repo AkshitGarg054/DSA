@@ -6,13 +6,12 @@ public:
         int n = image.size();
         int m = image[0].size();
 
+        vector<vector<int>> vis(n, vector<int>(m, 0));
         int original = image[sr][sc];
-        if(color == original) return image;
-
-        image[sr][sc] = color;
 
         queue<pair<int, int>> q;
         q.push({sr, sc});
+        vis[sr][sc] = 1;
 
         while(!q.empty()) {
             int sz = q.size();
@@ -22,22 +21,23 @@ public:
                 auto [r, c] = q.front();
                 q.pop();
 
+                image[r][c] = color;
+
                 for(auto &d: dirs) {
                     int nr = r + d[0];
                     int nc = c + d[1];
 
                     if(nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
                     if(image[nr][nc] != original) continue;
+                    if(vis[nr][nc] == 1) continue;
 
-                    if(image[nr][nc] == original) {
-                        image[nr][nc] = color;
-                        q.push({nr, nc});
-                        found = true;
-                    }
+                    vis[nr][nc] = 1;
+                    q.push({nr, nc});
+                    found = true;
                 }
             }
 
-            if(found == false) break;
+            if(!found) break;
         }
 
         return image;
