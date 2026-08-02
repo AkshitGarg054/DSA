@@ -4,37 +4,30 @@ public:
         int n = s.size();
         int m = t.size();
 
-        unordered_map<char, int> mp;
-        for(auto &ch: t) mp[ch]++;
+        unordered_map<char, int> mpt, mps;
+        for(auto &ch: t) mpt[ch]++;
 
         int l = 0, r = 0;
-        int mini = 1e8;
-        int count = 0;
+        int found = 0;
+        int mini = INT_MAX;
         int start = -1;
 
         while(r < n) {
-            char curr = s[r];
+            char ch = s[r];
 
-            if(mp.count(curr)) {
-                if(mp[curr] > 0) count++;
-                mp[curr]--; // keep decremting to store the extra chars also
-            }
+            mps[ch]++;
+            if(mpt.count(ch) && mps[ch] <= mpt[ch]) found++;
 
-            while(count == m) {
+            while(found == t.size()) {
                 if(r - l + 1 < mini) {
                     mini = r - l + 1;
                     start = l;
                 }
 
-                // shrink window
-                char remove = s[l];
-
-                if(!mp.count(remove)) l++;
-                else {
-                    mp[remove]++; 
-                    if(mp[remove] > 0) count--;
-                    l++;
-                }
+                mps[s[l]]--;
+                if(mpt.count(s[l]) && mps[s[l]] < mpt[s[l]]) found--;
+                if(mps[s[l]] == 0) mps.erase(s[l]);
+                l++;
             }
 
             r++;
