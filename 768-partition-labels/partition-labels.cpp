@@ -15,17 +15,16 @@ public:
 
         int i = 0;
         while(i < n) {
-            char ch = s[i];
+            int limit = mp[s[i]];
 
             int j = i + 1;
-            int maxi = mp[ch];
-            while(j <= maxi) {
-                maxi = max(maxi, mp[s[j]]);
+            while(j < limit) {
+                limit = max(limit, mp[s[j]]);
                 j++;
             }
 
-            ans.push_back(maxi - i + 1);
-            i = maxi + 1;
+            ans.push_back(limit - i + 1);
+            i = limit + 1;
         }
 
         return ans;
