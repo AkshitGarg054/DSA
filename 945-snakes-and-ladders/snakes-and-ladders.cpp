@@ -1,52 +1,51 @@
 class Solution {
 public:
-    int n;
+    int n, m;
 
-    int cell(int index, vector<vector<int>> &board) {
-        if(index > n*n) return 1e9;
-        index = index - 1; // for 0 based indexing 
+    int cell(int index, vector<vector<int>> &grid) {
+        index = index - 1; // convert to 0-based indexing
 
-        int row = index / n; // this is the row from top
-        int col = index % n;
-        if(row % 2 != 0) col = n - col - 1;
+        int row = index / m; // row from top
+        int col = index % m; 
+        if(row % 2 != 0) col = m - 1 - col;
 
-        return board[n - row - 1][col]; // (n - row - 1) is the row from bottom
+        return grid[n - 1 - row][col]; // row from bottom
     }
 
     int snakesAndLadders(vector<vector<int>>& board) {
         n = board.size();
-        int steps = 0;
+        m = board[0].size();
 
-        queue<int> q; // current square
-        q.push(1); // start position
+        queue<int> q;
+        q.push(1); 
 
         vector<int> vis(n*n + 1, 0);
         vis[1] = 1;
 
+        int rolls = 0;
+
         while(!q.empty()) {
             int sz = q.size();
-            
+
             while(sz--) {
                 int curr = q.front();
                 q.pop();
 
-                if(curr == n*n) return steps;
+                if(curr == n*n) return rolls;
 
-                for(int i = 1; i <= 6; i++) {
-                    int next = curr + i;
-                    if(next > n*n) break;
+                for(int i = curr + 1; i <= min(curr + 6, n*n); i++) {
+                    if(vis[i]) continue;
+                    vis[i] = 1;
 
-                    int val = cell(next, board); // if there's a snake or ladder, then we must take it
-                    if(val != -1) next = val;
-
-                    if(!vis[next]) {
-                        vis[next] = 1;
-                        q.push(next);
+                    if(cell(i, board) == -1) q.push(i);
+                    else {
+                        int value = cell(i, board);
+                        q.push(value);
                     }
                 }
             }
 
-            steps++;
+            rolls++;
         }
 
         return -1;
