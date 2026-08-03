@@ -13,7 +13,7 @@ public:
         for(int i = 0; i < n; i++) {
             currGas += gas[i] - cost[i]; // curr total gas in our tank.
             if(currGas < 0) {
-                start = i + 1;
+                start = i + 1; // we need to find a starting index so that the running sum never becomes negative.
                 currGas = 0;
             }
         }
