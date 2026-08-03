@@ -1,33 +1,35 @@
 class Solution {
 public:
-    // we always try to pick (n+1) elements from the heap, kyuki hme n ka gap chahiye ...and 1 is the element itself.
-    // agar (n+1) elements mil rhe hnn, fir to boht badhiaa.
-    // aur agar nhi mil rhee, to remaining needed elements ke liye idle process add krdo.
-
     int leastInterval(vector<char>& tasks, int n) {
         unordered_map<char, int> mp;
         for(auto &ch: tasks) mp[ch]++;
 
-        priority_queue<int> pq;
+        priority_queue<int> pq; // max heap
         for(auto &it: mp) pq.push(it.second);
 
-        int count = 0;
-
+        queue<pair<int, int>> q; // {freq, time when it will come back}
+        int time = 0;
+    
         while(!pq.empty()) {
-            vector<int> temp;
-            int cycle = n + 1;
+            int freq = pq.top();
+            pq.pop();
 
-            while(cycle && !pq.empty()) {
-                int f = pq.top();
-                pq.pop();
-                if(f - 1 > 0) temp.push_back(f - 1);
-                count++, cycle--;
+            time++;
+            freq--;
+            if(freq > 0) q.push({freq, time + n});
+
+            if(pq.empty() && q.size() > 0) {
+                int wait = q.front().second - time;
+                time += wait; // idle time
             }
 
-            for(int x: temp) pq.push(x);
-            if(!pq.empty()) count += cycle; // add remaining cycle as idle time if (n+1) unique processes were not there
+            if(q.front().second == time) {
+                int f = q.front().first;
+                q.pop();
+                pq.push(f);
+            }
         }
 
-        return count;
+        return time;
     }
 };
