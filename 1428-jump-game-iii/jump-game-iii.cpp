@@ -1,34 +1,32 @@
 class Solution {
 public:
-    vector<int> vis;
-
-    bool dfs(vector<int> &arr, int index) {
-        vis[index] = 1; 
-        if(arr[index] == 0) return true;
-
-        int left = index - arr[index];
-        int right = index + arr[index];
-
-        if(left >= 0 && !vis[left] && dfs(arr, left)) return true;
-        if(right < arr.size() && !vis[right] && dfs(arr, right)) return true;
-
-        return false;
-    }
-
     bool canReach(vector<int>& arr, int start) {
         int n = arr.size();
+        vector<int> vis(n, 0);
 
-        bool zero = false;
-        for(int i =  0; i < n; i++) {
-            if(arr[i] == 0) {
-                zero = true;
-                break;
+        queue<int> q;
+        q.push(start);
+        vis[start] = 1;
+
+        while(!q.empty()) {
+            int index = q.front();
+            q.pop();
+
+            if(arr[index] == 0) return true;
+
+            int next = index + arr[index];
+            if(next < n && !vis[next]) {
+                q.push(next);
+                vis[next] = 1;
+            }
+
+            next = index - arr[index];
+            if(next >= 0 && !vis[next]) {
+                q.push(next);
+                vis[next] = 1;
             }
         }
 
-        if(zero == false) return false;
-
-        vis.resize(n, 0);
-        return dfs(arr, start);
+        return false;
     }
 };
