@@ -1,32 +1,24 @@
 class Solution {
 public:
+    bool solve(int idx, vector<int>& arr, vector<int>& vis) {
+        int n = arr.size();
+        
+        if(idx < 0 || idx >= n) return false;
+        if(vis[idx]) return false;
+        if(arr[idx] == 0) return true;
+
+        vis[idx] = 1;
+
+        bool pos = solve(idx + arr[idx], arr, vis);
+        bool neg = solve(idx - arr[idx], arr, vis);
+
+        return pos || neg;
+    }
+
     bool canReach(vector<int>& arr, int start) {
         int n = arr.size();
         vector<int> vis(n, 0);
 
-        queue<int> q;
-        q.push(start);
-        vis[start] = 1;
-
-        while(!q.empty()) {
-            int index = q.front();
-            q.pop();
-
-            if(arr[index] == 0) return true;
-
-            int next = index + arr[index];
-            if(next < n && !vis[next]) {
-                q.push(next);
-                vis[next] = 1;
-            }
-
-            next = index - arr[index];
-            if(next >= 0 && !vis[next]) {
-                q.push(next);
-                vis[next] = 1;
-            }
-        }
-
-        return false;
+        return solve(start, arr, vis);
     }
 };
