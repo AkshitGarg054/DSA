@@ -5,20 +5,17 @@ public:
         vector<int> nge(n, -1);
         stack<int> st;
 
-        // nge
         for(int i = 0; i < n; i++) {
-            while(!st.empty() && temperatures[i] > temperatures[st.top()]) {
+            while(!st.empty() && temperatures[st.top()] < temperatures[i]) {
                 nge[st.top()] = i;
                 st.pop();
             }
             st.push(i);
         }
 
-        vector<int> ans(n);
-
+        vector<int> ans(n, 0);
         for(int i = 0; i < n; i++) {
-            if(nge[i] == -1) ans[i] = 0;
-            else ans[i] = nge[i] - i;
+            if(nge[i] != -1) ans[i] = nge[i] - i;
         }
 
         return ans;
