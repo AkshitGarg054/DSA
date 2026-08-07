@@ -1,7 +1,10 @@
 class Solution {
 public:
+    // We will find the maximum subarray sum ending at i, that is, sum[i].
+    // we will then take the maximum of all sum[i]
+
     int maxSubArray(vector<int>& nums) {
-        int n = nums.size();
+        int n = nums.size();    
         int maxi = nums[0];
         int prev = nums[0], curr = nums[0];
 
