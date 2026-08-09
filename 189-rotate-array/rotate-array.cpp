@@ -4,8 +4,10 @@ public:
         int n = nums.size();
         k = k % n;
 
-        reverse(nums.begin(), nums.end());
-        reverse(nums.begin(), nums.begin() + k);
-        reverse(nums.begin() + k, nums.end());
+        // rotate(first, middle, last) --> It rotates the range [first, last) so that middle becomes the first element.
+        // vector<int> a = {1, 2, 3, 4, 5};
+        // rotate(a.begin(), a.end() - 2, a.end());
+        
+        std::rotate(nums.begin(), nums.begin() + n - k, nums.end());
     }
 };
