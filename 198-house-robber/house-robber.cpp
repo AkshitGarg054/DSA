@@ -1,15 +1,21 @@
 class Solution {
 public:
-    int dp[101][2];
+    int dp[101][3];
 
-    int solve(int index, bool prev, vector<int> &nums) {
+    int solve(int index, int prev, vector<int> &nums) {
         if(index == nums.size()) return 0;
-        if(dp[index][prev] != -1) return dp[index][prev];
+        if(prev != -1 && dp[index][prev] != -1) return dp[index][prev];
 
-        int take = 0, skip = 0;
-        if(prev == false) take = nums[index] + solve(index + 1, true, nums);
-        skip = solve(index + 1, false, nums);
+        int take = -1e9;
+        int skip = -1e9;
 
+        if(prev == 1) skip = solve(index + 1, 0, nums);
+        else {
+            take = nums[index] + solve(index + 1, 1, nums);
+            skip = solve(index + 1, 0, nums);
+        }
+
+        if(prev == -1) return max(take, skip);
         return dp[index][prev] = max(take, skip);
     }
 
@@ -17,6 +23,7 @@ public:
         int n = nums.size();
 
         memset(dp, -1, sizeof(dp));
-        return solve(0, false, nums); // index, prev ...prev = false means prev is not taken
+        int ans = solve(0, -1, nums); // 1 is prev is taken
+        return ans;
     }
 };
