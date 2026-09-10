@@ -1,28 +1,19 @@
 class Solution {
 public:
-    int numArrays(vector<int>& nums, int k) {
-        if (k < 0) return 0;
-        int n = nums.size();
-        int l = 0, r = 0;
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        unordered_map<int, int> mp;
+
+        mp[0] = 1;  // empty prefix
+
         int sum = 0;
-        int count = 0;
+        int ans = 0;
 
-        while(r < n) {
-            sum = sum + nums[r];
-
-            while (sum > k) {
-                sum = sum - nums[l];
-                l++;
-            }
-
-            count += (r - l + 1);
-            r++;
+        for(int x : nums) {
+            sum += x;
+            if(mp.count(sum - goal)) ans += mp[sum - goal];
+            mp[sum]++;
         }
 
-        return count;
-    }
-
-    int numSubarraysWithSum(vector<int>& nums, int goal) {
-        return numArrays(nums, goal) - numArrays(nums, goal - 1);
+        return ans;
     }
 };
