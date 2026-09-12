@@ -1,13 +1,7 @@
-# using SUBQUERY
-# Step A: write a subquery to extract the IDs that appear at least 5 times in the managerId column? 
-# Step B: What are the names of the employees whose id matches those IDs?
+# Who are the IDs that appear at least 5 times in the managerId column? 
 
-SELECT name 
-FROM Employee
-WHERE id IN (
-    SELECT managerId
-    FROM Employee
-    WHERE managerId is not NULL
-    GROUP BY managerId
-    HAVING COUNT(managerId) >= 5
-);
+SELECT e1.name
+FROM Employee e1 JOIN Employee e2
+ON e1.id = e2.managerId
+GROUP BY e2.managerId
+HAVING COUNT(e2.managerId) >= 5;
