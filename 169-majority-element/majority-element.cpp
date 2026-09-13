@@ -2,19 +2,15 @@ class Solution {
 public:
     int majorityElement(vector<int>& nums) {
         int n = nums.size();
-
+        int required = (n / 2) + 1;
         unordered_map<int, int> mp;
-        for(auto it : nums) mp[it]++;
 
-        int maxi = INT_MIN;
-        int ans = -1;
-        for(auto [key, value] : mp) {
-            if(value > maxi) {
-                maxi = value;
-                ans = key;
-            }
+        for(int i = 0; i < n; i++) {
+            int curr = nums[i];
+            mp[curr]++;
+            if(mp[curr] >= required) return curr;
         }
 
-        return ans;
+        return -1;
     }
 };
