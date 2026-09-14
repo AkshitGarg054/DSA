@@ -21,8 +21,6 @@ public:
                 auto [r, c] = q.front();
                 q.pop();
 
-                image[r][c] = color;
-
                 for(auto &d: dirs) {
                     int nr = r + d[0];
                     int nc = c + d[1];
