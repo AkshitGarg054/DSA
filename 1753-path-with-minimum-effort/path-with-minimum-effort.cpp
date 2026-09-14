@@ -1,43 +1,38 @@
 class Solution {
 public:
-    // we used queue in this soln, but queue can't be used because here edge weights are different
-    // so to find the mini effort path, we need to revisit the visited edges, which we can't do in normal BFS.
-    // We can modify it by using the effort array instead of vis array. (just like dijkstra)
-    vector<vector<int>> dirs = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+    vector<vector<int>> dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
     int minimumEffortPath(vector<vector<int>>& heights) {
         int n = heights.size();
         int m = heights[0].size();
 
-        vector<vector<int>> effort(n, vector<int>(m, INT_MAX));
+        vector<vector<int>> dist(n, vector<int>(m, 1e9)); // to save the min effort to reach (i, j)
+        dist[0][0] = 0;
 
-        queue<pair<pair<int, int>, int>> q; // {{row, col}, maxi_diff}
-        q.push({{0, 0}, INT_MIN});
-        effort[0][0] = 0;
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<>> pq; 
+        pq.push({0, {0, 0}}); // {effort, {r, c}}
 
-        int mini = INT_MAX;
+        while(!pq.empty()) {
+            auto [effort, cell] = pq.top();
+            pq.pop();
 
-        while(!q.empty()) {
-            auto [it, maxi] = q.front();
-            q.pop();
-            auto [r, c] = it;
+            int r = cell.first, c = cell.second;
+            if(r == n - 1 && c == m - 1) return effort;
 
             for(auto &d: dirs) {
                 int nr = r + d[0];
                 int nc = c + d[1];
-
                 if(nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
 
-                int diff = abs(heights[nr][nc] - heights[r][c]);
-                int new_effort = max(maxi, diff); // stores the maxi diff for a path till this (nr, nc) cell
-
-                if(effort[nr][nc] > new_effort) {
-                    effort[nr][nc] = new_effort;
-                    q.push({{nr, nc}, new_effort});
+                int w = abs(heights[nr][nc] - heights[r][c]);
+                if(dist[nr][nc] > max(w, effort)) {
+                    dist[nr][nc] = max(w, effort);
+                    pq.push({dist[nr][nc], {nr, nc}});
                 }
             }
         }
 
-        return effort[n-1][m-1];
+        if(dist[n - 1][m - 1] == 1e9) return -1;
+        return dist[n - 1][m - 1];
     }
 };
