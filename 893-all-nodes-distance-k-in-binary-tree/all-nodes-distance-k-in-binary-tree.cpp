@@ -1,45 +1,35 @@
 class Solution {
 public:
-    // here, we also need to move upwards towards parent
-    // so, we will store parent for every node in a map
-    // and then simply apply BFS from the target node and stop after exactly k levels.
-    // because, after k levels, all nodes in the queue are the answer.
-    // NOTE: with left, right and parent, for each node, we are treating this tree as an undirected graph, so we also need to keep a visited list.
-    // So, we can say whenever we also visit parent in a tree, then it becomes a undirected graph. (Nice concept)
+    unordered_map<TreeNode*, TreeNode*> mp;
 
-    unordered_map<TreeNode*, TreeNode*> parent; // to store parent of each child node
+    void findParent(TreeNode* node, TreeNode* parent) {
+        if(node == NULL) return;
 
-    void findParents(TreeNode* root) {
-        if(root == NULL) return;
-
-        if(root -> left) {
-            parent[root -> left] = root;
-            findParents(root -> left);
-        }
-        
-        if(root -> right) {
-            parent[root -> right] = root;
-            findParents(root -> right);
-        }
+        mp[node] = parent;
+        findParent(node -> left, node);
+        findParent(node -> right, node);
     }
 
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        findParents(root);
+        if(root == NULL) return {};
+
+        TreeNode* temp = new TreeNode(-1);
+        findParent(root, temp);
 
         queue<TreeNode*> q;
-        unordered_map<TreeNode*, bool> vis;
-
         q.push(target);
+
+        unordered_map<TreeNode*, bool> vis;
         vis[target] = true;
 
-        int level = 0;
+        int levels = 0;
 
         while(!q.empty()) {
-            int n = q.size();   
-            if(level == k) break;
-            level++;
+            int sz = q.size();
+            if(levels == k) break;
+            levels++;
 
-            for(int i = 0; i < n; i++) {
+            while(sz--) {
                 auto curr = q.front();
                 q.pop();
 
@@ -53,9 +43,9 @@ public:
                     vis[curr -> right] = true;
                 }
 
-                if(parent.count(curr) && !vis[parent[curr]]) {
-                    q.push(parent[curr]);
-                    vis[parent[curr]] = true;
+                if(mp.count(curr) && !vis[mp[curr]] && mp[curr] -> val != -1) {
+                    q.push(mp[curr]);
+                    vis[mp[curr]] = true;
                 }
             }
         }
