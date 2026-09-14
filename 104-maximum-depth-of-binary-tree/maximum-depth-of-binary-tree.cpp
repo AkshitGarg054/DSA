@@ -1,30 +1,18 @@
 class Solution {
 public:
+    int solve(TreeNode* root) {
+        if(root == NULL) return 0;
+
+        int left = solve(root -> left);
+        int right = solve(root -> right);
+
+        return max(left, right) + 1;
+    }
+
     int maxDepth(TreeNode* root) {
-        if (root == nullptr){
-            return 0;
-        }
-        // depth wise iteration 
-        queue<TreeNode*> st;
-        int count = 0;
-        st.push(root);
-        int size = 0;
-        while(!st.empty()){
-            size = st.size();
-            while(size--){
-                auto it = st.front();
-                st.pop();
-                if (it->left != nullptr){
-                    st.push(it->left);
-                }
-                if (it->right != nullptr){
-                    st.push(it->right);
-                }
-            }
-            count++;
-        }
+        if(root == NULL) return 0;
 
-
-        return count;
+        int ans = solve(root);
+        return ans;
     }
 };
