@@ -4,22 +4,22 @@ public:
 
     int solve(int i, int j, string &s) {
         if (i > j) return 0;
-        if (i == j) return 1;
+        if (i == j) return 0;
 
         if (dp[i][j] != -1) return dp[i][j];
 
-        int equal = 0, unequal = 0;
+        int equal = 1e9, unequal = 1e9;
 
-        if (s[i] == s[j]) equal = 2 + solve(i + 1, j - 1, s);
-        else unequal = max(solve(i + 1, j, s), solve(i, j - 1, s));
+        if (s[i] == s[j]) equal = solve(i + 1, j - 1, s);
+        else unequal = min(1 + solve(i, j - 1, s), 1 + solve(i + 1, j, s));
 
-        return dp[i][j] = max(equal, unequal);
+        return dp[i][j] = min(equal, unequal);
     }
 
     int minInsertions(string s) {
         int n = s.size();
         dp.assign(n, vector<int>(n, -1));
 
-        return n - solve(0, n - 1, s); // Minimum insertions: n - LPS
+        return solve(0, n - 1, s); // Minimum insertions: n - LPS
     }
 };
