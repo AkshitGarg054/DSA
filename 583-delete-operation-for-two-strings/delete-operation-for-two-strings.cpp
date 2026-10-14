@@ -1,24 +1,27 @@
 class Solution {
 public:
-    // very important question (to identify the LCS pattern)
-    // They must both reduce to their Longest Common Subsequence (LCS)
-    // n = length of word1, m = length of word2, L = LCS(word1, word2)
-    // answer = (n - L) + (m - L)
+    vector<vector<int>> dp;
+
+    int solve(int i, int j, string &word1, string &word2) {
+        if (i == word1.size()) return word2.size() - j;
+        if (j == word2.size()) return word1.size() - i;
+
+        if (dp[i][j] != -1) return dp[i][j];
+
+        int del = 1e9, not_delete = 1e9;
+
+        if (word1[i] == word2[j]) {
+            not_delete = solve(i + 1, j + 1, word1, word2);
+        }
+        else del = min(1 + solve(i + 1, j, word1, word2), 1 + solve(i, j + 1, word1, word2));
+
+        return dp[i][j] = min(del, not_delete);
+    }
 
     int minDistance(string word1, string word2) {
-        int n = word1.size();
-        int m = word2.size();
+        int n = word1.size(), m = word2.size();
+        dp.assign(n, vector<int>(m, -1));
 
-        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
-
-        for(int i = 1; i <= n; i++) {
-            for(int j = 1; j <= m; j++) {
-                if(word1[i-1] == word2[j-1]) dp[i][j] = 1 + dp[i-1][j-1];
-                else dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
-            }
-        }
-
-        int L = dp[n][m];
-        return (n - L) + (m - L);
+        return solve(0, 0, word1, word2);
     }
 };
