@@ -20,6 +20,6 @@ public:
         int n = s.size();
         dp.assign(n, vector<int>(n, -1));
 
-        return solve(0, n - 1, s); // Minimum insertions: n - LPS
+        return solve(0, n - 1, s); 
     }
 };
