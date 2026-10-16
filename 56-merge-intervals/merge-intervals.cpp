@@ -10,7 +10,7 @@ public:
         for(int i = 1; i < n; i++) {
             vector<int> curr = intervals[i];
 
-            if(prev[1] >= curr[0] && prev[1] <= curr[1]) {
+            if(prev[1] >= curr[0]) {
                 prev[0] = min(prev[0], curr[0]);
                 prev[1] = max(prev[1], curr[1]);
             }
