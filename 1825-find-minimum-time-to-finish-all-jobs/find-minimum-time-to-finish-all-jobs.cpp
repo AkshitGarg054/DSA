@@ -21,16 +21,20 @@ public:
 
         int low = *max_element(jobs.begin(), jobs.end());
         int high = accumulate(jobs.begin(), jobs.end(), 0);
+        int ans = high;
 
-        while (low < high) {
+        while (low <= high) {
             int mid = low + (high - low) / 2;
 
             vector<int> workers(k, 0);
 
-            if (canAssign(0, jobs, workers, mid, k)) high = mid;
+            if (canAssign(0, jobs, workers, mid, k)) {
+                ans = mid;
+                high = mid - 1;
+            }
             else low = mid + 1;
         }
 
-        return low;
+        return ans;
     }
 };
