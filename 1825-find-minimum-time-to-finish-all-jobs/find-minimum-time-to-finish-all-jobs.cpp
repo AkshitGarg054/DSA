@@ -1,27 +1,36 @@
 class Solution {
 public:
-    int ans = INT_MAX;
+    bool canAssign(int idx, vector<int>& jobs, vector<int>& workers, int limit, int k) {
+        if (idx == jobs.size()) return true;
 
-    void f(int ind, vector<int> &workers, vector<int> &jobs, int k) {
-        if(ind == jobs.size()) {
-            int maxi = 0;
-            for(int i=0; i < k; i++) maxi = max(workers[i], maxi);
-            ans = min(ans, maxi);
-            return;
+        for (int i = 0; i < k; i++) {
+            if (workers[i] + jobs[idx] <= limit) {
+                workers[i] += jobs[idx];
+                if (canAssign(idx + 1, jobs, workers, limit, k)) return true;
+                workers[i] -= jobs[idx];
+            }
+
+            if (workers[i] == 0) break; // Symmetry breaking: empty workers are equivalent
         }
 
-        for(int i = 0; i < k; i++) {
-            workers[i] += jobs[ind];
-            if (*max_element(workers.begin(), workers.end()) < ans) f(ind + 1, workers, jobs, k);
-            workers[i] -= jobs[ind];
-            if(workers[i] == 0) break;
-        }
+        return false;
     }
 
     int minimumTimeRequired(vector<int>& jobs, int k) {
-        int n = jobs.size();
-        vector<int> workers(k, 0);
-        f(0, workers, jobs, k);
-        return ans;
+        sort(jobs.rbegin(), jobs.rend());
+
+        int low = *max_element(jobs.begin(), jobs.end());
+        int high = accumulate(jobs.begin(), jobs.end(), 0);
+
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+
+            vector<int> workers(k, 0);
+
+            if (canAssign(0, jobs, workers, mid, k)) high = mid;
+            else low = mid + 1;
+        }
+
+        return low;
     }
 };
