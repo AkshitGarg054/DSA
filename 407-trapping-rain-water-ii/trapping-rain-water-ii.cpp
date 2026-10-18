@@ -32,11 +32,17 @@ public:
                 int nr = r + d[0];
                 int nc = c + d[1];
 
-                if(nr >= 0 && nr < n && nc >= 0 && nc < m && !vis[nr][nc]) {
-                    vis[nr][nc] = 1;
-                    if(heightMap[nr][nc] < h) water += (h - heightMap[nr][nc]);
-                    pq.push({max(h, heightMap[nr][nc]), nr, nc});
+                if(nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
+                if(vis[nr][nc]) continue;
+
+                vis[nr][nc] = 1;
+
+                if(heightMap[nr][nc] < h) {
+                    water += h - heightMap[nr][nc];
+                    heightMap[nr][nc] = h;
                 }
+                
+                pq.push({heightMap[nr][nc], nr, nc}); 
             }
         }
 
