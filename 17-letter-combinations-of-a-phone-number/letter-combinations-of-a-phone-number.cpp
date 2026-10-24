@@ -1,6 +1,6 @@
 class Solution {
 public:
-    vector<string> KEYS = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    vector<string> strs = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
     vector<string> ans;
 
     void solve(int index, string &temp, string &digits) {
@@ -9,12 +9,12 @@ public:
             return;
         }
 
-        int number = digits[index] - '0';
-        for(auto &ch: KEYS[number]) {
-            int m = temp.size();
+        int digit = digits[index] - '0';
+
+        for(auto &ch: strs[digit]) {
             temp += ch;
             solve(index + 1, temp, digits);
-            temp.resize(m); // backtrack
+            temp.pop_back();
         }
     }
 
