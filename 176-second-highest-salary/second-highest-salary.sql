@@ -1,6 +1,8 @@
-SELECT ( # By placing the original logic inside a SELECT (...), SQL will automatically evaluate an empty result set as null.
+SELECT (
     SELECT DISTINCT salary 
-    FROM Employee
-    ORDER BY salary DESC
-    LIMIT 1 OFFSET 1
-) AS SecondHighestSalary
+    FROM (
+        SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) as rnk
+        FROM Employee
+    ) as t
+    WHERE rnk = 2
+) as SecondHighestSalary
