@@ -1,8 +1,8 @@
-SELECT Department, Employee, Salary
-FROM (
-    SELECT d.name as Department, e.name as Employee, e.salary as Salary,
-    RANK() OVER (PARTITION BY departmentId ORDER BY salary DESC) as rnk
-    FROM Employee e JOIN Department d
-    ON e.departmentId = d.id
-) t
-WHERE rnk = 1
+SELECT d.name AS Department, e1.name AS Employee, e1.salary AS Salary
+FROM Employee e1 JOIN Department d
+ON e1.departmentId = d.id
+WHERE e1.salary = (
+    SELECT MAX(e2.salary) 
+    FROM Employee e2
+    WHERE e2.departmentId = e1.departmentId
+)
