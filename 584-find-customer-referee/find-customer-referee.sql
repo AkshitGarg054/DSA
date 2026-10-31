@@ -1,4 +1,3 @@
-SELECT c.name
-FROM Customer c
-LEFT JOIN Customer r ON c.referee_id = r.id
-WHERE r.id != 2 OR r.id is NULL
+SELECT name
+FROM Customer 
+WHERE referee_id != 2 OR referee_id is NULL
