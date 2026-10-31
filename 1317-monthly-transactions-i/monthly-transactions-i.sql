@@ -7,3 +7,6 @@ SELECT
     SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) as approved_total_amount 
 FROM Transactions
 GROUP BY country, month
+
+## If SELECT runs after GROUP BY then how are we able to access 'month' in the GROUP BY??
+# MySQL allows you to use a SELECT alias in GROUP BY as a special exception.
