@@ -16,15 +16,15 @@ process_id is the ID of a process running on the machine with ID machine_id.
 activity_type is an ENUM (category) of type (&#39;start&#39;, &#39;end&#39;).
 timestamp is a float representing the current time in seconds.
 &#39;start&#39; means the machine starts the process at the given timestamp and &#39;end&#39; means the machine ends the process at the given timestamp.
-The &#39;start&#39; timestamp will always be before the &#39;end&#39; timestamp for every (machine_id, process_id) pair.
+The `start` timestamp will always be less than or equal to the `end` timestamp for every `(machine_id, process_id)` pair.
 It is guaranteed that each (machine_id, process_id) pair has a &#39;start&#39; and &#39;end&#39; timestamp.
 </pre>
 
 <p>&nbsp;</p>
 
-<p>There is a factory website that has several machines each running the <strong>same number of processes</strong>. Write a solution&nbsp;to find the <strong>average time</strong> each machine takes to complete a process.</p>
+<p>There is a factory website that has several machines, each running one or more processes. Write a solution&nbsp;to find the <strong>average time</strong> each machine takes to complete a process.</p>
 
-<p>The time to complete a process is the <code>&#39;end&#39; timestamp</code> minus the <code>&#39;start&#39; timestamp</code>. The average time is calculated by the total time to complete every process on the machine divided by the number of processes that were run.</p>
+<p>The time to complete a process is the <code>&#39;end&#39; timestamp</code> minus the <code>&#39;start&#39; timestamp</code>. The average time is calculated by the total time to complete every process on the machine divided by the number of processes that were run on that machine.</p>
 
 <p>The resulting table should have the <code>machine_id</code> along with the <strong>average time</strong> as <code>processing_time</code>, which should be <strong>rounded to 3 decimal places</strong>.</p>
 
