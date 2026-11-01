@@ -1,3 +1,4 @@
+-- every accepted friendship contributes 1 friend to both people. So we need to count IDs from both requester_id and accepter_id.
 -- UNION ALL combines both columns into one list of friend IDs.
 -- GROUP BY id counts how many times each person appears.
 -- MAX(num) finds the highest friend count.
