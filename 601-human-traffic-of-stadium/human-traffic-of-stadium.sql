@@ -1,32 +1,18 @@
-SELECT *
-FROM Stadium
-WHERE id IN (
-      SELECT s1.id
-      FROM Stadium s1
-      JOIN Stadium s2 ON s2.id = s1.id + 1
-      JOIN Stadium s3 ON s3.id = s1.id + 2
-      WHERE s1.people >= 100
-        AND s2.people >= 100
-        AND s3.people >= 100
+WITH temp AS (
+    SELECT *,
+           LAG(people, 1) OVER (ORDER BY id) AS prev1,
+           LAG(people, 2) OVER (ORDER BY id) AS prev2,
+           LEAD(people, 1) OVER (ORDER BY id) AS next1,
+           LEAD(people, 2) OVER (ORDER BY id) AS next2
+    FROM Stadium
+)
 
-      UNION
-
-      SELECT s1.id + 1
-      FROM Stadium s1
-      JOIN Stadium s2 ON s2.id = s1.id + 1
-      JOIN Stadium s3 ON s3.id = s1.id + 2
-      WHERE s1.people >= 100
-        AND s2.people >= 100
-        AND s3.people >= 100
-
-      UNION
-
-      SELECT s1.id + 2
-      FROM Stadium s1
-      JOIN Stadium s2 ON s2.id = s1.id + 1
-      JOIN Stadium s3 ON s3.id = s1.id + 2
-      WHERE s1.people >= 100
-        AND s2.people >= 100
-        AND s3.people >= 100
-  )
+SELECT id, visit_date, people
+FROM temp
+WHERE 
+    (people >= 100 AND prev1 >= 100 AND prev2 >= 100) -- current is 3rd
+    OR
+    (people >= 100 AND prev1 >= 100 AND next1 >= 100) -- current is middle
+    OR
+    (people >= 100 AND next1 >= 100 AND next2 >= 100) -- current is 1st
 ORDER BY visit_date;
