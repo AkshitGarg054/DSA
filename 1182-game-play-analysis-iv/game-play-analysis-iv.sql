@@ -1,14 +1,12 @@
-WITH first_login AS (
-    SELECT player_id, MIN(event_date) AS first_date
+SELECT ROUND(COUNT(DISTINCT a1.player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
+FROM Activity a1 
+JOIN (
+    SELECT player_id, MIN(event_date) as first_date
     FROM Activity
     GROUP BY player_id
-), 
-required AS (
-    SELECT DISTINCT a1.player_id as player_id
-    FROM Activity a1 JOIN first_login f
-    ON a1.player_id = f.player_id AND 
-    DATEDIFF(a1.event_date, f.first_date) = 1
-)
+) as a2
+ON a1.player_id = a2.player_id AND a1.event_date = DATE_ADD(a2.first_date, INTERVAL 1 DAY)
 
-SELECT ROUND(COUNT(player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) as fraction
-FROM required;
+
+# a1.event_date = first_date + 1
+# this addition won't work in case of: 2016-02-29 -> 2016-03-01
