@@ -6,10 +6,10 @@ public:
             return;
         }
 
-        if(vis.count(src)) return; // if already visited
         vis.insert(src);
 
         for(auto [v, val] : list[src]) {
+            if(vis.count(v)) continue; 
             dfs(v, dest, vis, list, product * val, ans);
         }
     }
