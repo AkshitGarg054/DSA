@@ -22,30 +22,21 @@ public:
         int sum = 0;
         for(int n : nums) sum += n;
 
-        if(abs(target) > sum || (target + sum) % 2 != 0 || (target + sum) < 0)
-            return 0;
+        if(abs(target) > sum || (target + sum) % 2 != 0 || (target + sum) < 0) return 0;
 
         int targetSum = (sum + target) / 2;
-        return solve(0, targetSum, nums);
+        return solve(0, 0, targetSum, nums);
     }
 
-    // ways to get the target sum from the subarrays of the given array or
-    // How many subsets of nums add up to (target + totalSum)/2
-    int solve(int idx, int sum, vector<int>& nums) {
-
-        // eye opening base case after doing coin change... see below - very imp guide...
-        if(idx >= nums.size()) { // check sum only when we reached at the end of the array
-            if(sum == 0) {
-                return 1;
-            }
+    int solve(int index, int sum, int target, vector<int>& nums) {
+        if(index == nums.size()) { 
+            if(sum == target) return 1;
             return 0;
         }
 
         int take = 0;
-        if(sum >= nums[idx])
-            take = solve(idx + 1, sum - nums[idx], nums);
-
-        int not_take = solve(idx + 1, sum, nums);
+        if(sum + nums[index] <= target) take = solve(index + 1, sum + nums[index], target, nums);
+        int not_take = solve(index + 1, sum, target, nums);
 
         return take + not_take;
     }
