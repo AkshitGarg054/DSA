@@ -3,10 +3,12 @@ public:
     vector<vector<int>> dp;
 
     int solve(int index, int sum, int target, vector<int> &nums) {
-        if(sum == target) return 0;
-        if(index == nums.size()) return INT_MIN;
-        if(dp[index][sum] != -1) return dp[index][sum]; 
+        if(index == nums.size()) {
+            if(sum == target) return 0;
+            return INT_MIN;
+        }
 
+        if(dp[index][sum] != -1) return dp[index][sum]; 
         int take = INT_MIN;
 
         if(sum + nums[index] <= target) {
