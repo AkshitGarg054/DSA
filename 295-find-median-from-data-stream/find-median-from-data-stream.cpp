@@ -1,5 +1,6 @@
 class MedianFinder {
 public:
+    // video link: https://youtu.be/NT5Lp5vaMm0?si=i6S80VkQwb0MQ8l0
     priority_queue<int> max_heap; // max heap is used to store the smaller half of the numbers
     priority_queue<int, vector<int>, greater<>> min_heap; // used to store the larger half of the numbers
 
